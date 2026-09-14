@@ -1,5 +1,5 @@
-import type { DummyRoute } from "../types/route";
-import { calculateTravelTime } from "../utils/time";
+import type { DummyRoute } from "../types/route.ts";
+import { calculateTravelTime } from "../utils/time.ts";
 
 interface RouteResultProps {
   route: DummyRoute;

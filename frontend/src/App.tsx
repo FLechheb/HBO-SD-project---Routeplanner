@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import dummyRoute from "./data/dummydata.json";
-import type { DummyRoute } from "./types/route";
-import RouteResult from "./components/RouteResult";
+import type { DummyRoute } from "./types/route.ts";
+import RouteResult from "./components/RouteResult.tsx";
 import RouteForm from "./components/RouteForm";
 
 const route: DummyRoute = dummyRoute;
