@@ -1,0 +1,78 @@
+{
+  "route": {
+    "from": "Utrecht Centraal",
+    "to": "Amsterdam Centraal"
+  },
+  "stops": [
+    {
+      "stopNumber": 1,
+      "stopName": "Utrecht Centraal",
+      "arrivalTime": "10:00",
+      "departureTime": "10:02",
+      "facility": "lift"
+    },
+    {
+      "stopNumber": 2,
+      "stopName": "Utrecht Overvecht",
+      "arrivalTime": "10:07",
+      "departureTime": "10:08",
+      "facility": "roltrap"
+    },
+    {
+      "stopNumber": 3,
+      "stopName": "Maarssen",
+      "arrivalTime": "10:13",
+      "departureTime": "10:14",
+      "facility": "hellingbaan"
+    },
+    {
+      "stopNumber": 4,
+      "stopName": "Breukelen",
+      "arrivalTime": "10:20",
+      "departureTime": "10:21",
+      "facility": "lift"
+    },
+    {
+      "stopNumber": 5,
+      "stopName": "Abcoude",
+      "arrivalTime": "10:29",
+      "departureTime": "10:30",
+      "facility": "geleidelijn"
+    },
+    {
+      "stopNumber": 6,
+      "stopName": "Amsterdam Holendrecht",
+      "arrivalTime": "10:36",
+      "departureTime": "10:37",
+      "facility": "roltrap"
+    },
+    {
+      "stopNumber": 7,
+      "stopName": "Amsterdam Zuid",
+      "arrivalTime": "10:44",
+      "departureTime": "10:46",
+      "facility": "lift"
+    },
+    {
+      "stopNumber": 8,
+      "stopName": "Amsterdam RAI",
+      "arrivalTime": "10:50",
+      "departureTime": "10:51",
+      "facility": "hellingbaan"
+    },
+    {
+      "stopNumber": 9,
+      "stopName": "Amsterdam Amstel",
+      "arrivalTime": "10:57",
+      "departureTime": "10:59",
+      "facility": "geleidelijn"
+    },
+    {
+      "stopNumber": 10,
+      "stopName": "Amsterdam Centraal",
+      "arrivalTime": "11:06",
+      "departureTime": "11:08",
+      "facility": "lift"
+    }
+  ]
+}
