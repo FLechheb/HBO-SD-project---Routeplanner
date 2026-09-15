@@ -4,13 +4,11 @@ import {useCallback, useEffect, useState} from "react";
 import {useSafeCall} from "../utils/apiUtils.ts";
 
 interface Stub {
-    // Add your actual Stub properties here
-    id: number;
-    // ...
+    name: string;
 }
 
 export function useFetchStub(dependencies: unknown[] = []) {
-    const [result, setResult] = useState<Stub[]>([]);
+    const [result, setResult] = useState<Stub | null>(null);
     const [failed, toggleFailed] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [loaded, toggleLoaded] = useState<boolean>(false);
@@ -23,9 +21,9 @@ export function useFetchStub(dependencies: unknown[] = []) {
                 toggleLoaded(false);
                 toggleFailed(false);
                 setError("");
-                setResult([]);
+                setResult(null);
 
-                const response = await axios.get<Stub[]>(
+                const response = await axios.get<Stub>(
                     `${import.meta.env.VITE_API_URL}/stub`,
                     {
                         signal: controller.signal,
@@ -33,11 +31,7 @@ export function useFetchStub(dependencies: unknown[] = []) {
                     }
                 );
 
-                setResult(
-                    response.data.map((stubData: Stub) => {
-                        return stubData;
-                    })
-                );
+                setResult(response.data);
             } catch (err: unknown) {
                 if (axios.isCancel(err)) {
                     return;
