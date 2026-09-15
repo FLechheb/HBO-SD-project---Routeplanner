@@ -80,7 +80,7 @@ export function useCreateStub() {
     async function createStub(data: Stub) {
         return safeCall(async (controller: AbortController) => {
             try {
-                const response = await axios.post<Stub>(
+                const response = await axios.get<Stub>(
                     `${import.meta.env.VITE_API_URL}/stub`,
                     data,
                     {
