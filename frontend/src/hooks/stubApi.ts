@@ -1,5 +1,6 @@
-import axios, {AxiosError, AxiosResponse} from "axios";
-import {useState} from "react";
+import axios from "axios";
+import type {AxiosResponse} from "axios";
+import {useCallback, useEffect, useState} from "react";
 import {useSafeCall} from "../utils/apiUtils.ts";
 
 interface Stub {
@@ -8,21 +9,16 @@ interface Stub {
     // ...
 }
 
-interface CreateStubResult {
-    success: boolean;
-    response: AxiosResponse<Stub> | AxiosError;
-}
-
 export function useFetchStub(dependencies: unknown[] = []) {
     const [result, setResult] = useState<Stub[]>([]);
     const [failed, toggleFailed] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [loaded, toggleLoaded] = useState<boolean>(false);
 
-    const {safeCall, abort} = useSafeCall();
+    const {safeCall} = useSafeCall(dependencies);
 
-    async function loadCall(controller: AbortController): Promise<void> {
-        return safeCall(async (controller: AbortController) => {
+    const loadCall = useCallback(async (): Promise<void> => {
+        await safeCall(async (controller: AbortController) => {
             try {
                 toggleLoaded(false);
                 toggleFailed(false);
@@ -43,6 +39,10 @@ export function useFetchStub(dependencies: unknown[] = []) {
                     })
                 );
             } catch (err: unknown) {
+                if (axios.isCancel(err)) {
+                    return;
+                }
+
                 console.warn(err);
 
                 toggleFailed(true);
@@ -55,14 +55,19 @@ export function useFetchStub(dependencies: unknown[] = []) {
             } finally {
                 toggleLoaded(true);
             }
-        })
-    }
+        });
+    }, [safeCall]);
+
+    useEffect(() => {
+        void loadCall();
+    }, [loadCall]);
 
     return {
         result,
         loaded,
         failed,
         error,
+        reload: loadCall,
     };
 }
 
