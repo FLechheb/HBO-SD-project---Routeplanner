@@ -46,12 +46,12 @@ function RouteForm({
 
   return (
       <>
-        {!loaded && <div>pending</div>}
-        {loaded && failed && <div>{error}</div>}
-        {loaded && !failed && <div>{JSON.stringify(result)}</div>}
-        <button type="button" onClick={() => void reload()}>
-          Opnieuw laden
-        </button>
+        {/*{!loaded && <div>pending</div>}*/}
+        {/*{loaded && failed && <div>{error}</div>}*/}
+        {/*{loaded && !failed && <div>{JSON.stringify(result)}</div>}*/}
+        {/*<button type="button" onClick={() => void reload()}>*/}
+        {/*  Opnieuw laden*/}
+        {/*</button>*/}
         <form onSubmit={onSubmit}>
           <div>
             <label htmlFor="departure">Vertrekstation</label>
