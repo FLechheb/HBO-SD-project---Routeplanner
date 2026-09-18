@@ -1,5 +1,5 @@
 interface RouteFormProps {
-    stations: string[];
+  stations: string[];
   departure: string;
   destination: string;
   timeMode: "now" | "departure" | "arrival";

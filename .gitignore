@@ -53,7 +53,6 @@
 # Visual Studio Code
 .vscode/*
 !.vscode/extensions.json
-!.vscode/settings.json
 
 # NetBeans
 **/nbproject/private/
@@ -69,3 +68,10 @@
 **/*.swp
 **/*.swo
 **/*~
+
+# Claude Code notes (personal study/memory use only, not part of the submission)
+CLAUDE.md
+school/
+
+# OpenTripPlanner data (OSM/GTFS input + built graph.obj) - too large for git, shared via OneDrive
+backend/otp-data/
