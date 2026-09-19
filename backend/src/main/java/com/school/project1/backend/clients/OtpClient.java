@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
-import com.school.project1.backend.models.RoutePlanRequest;
+import com.school.project1.backend.model.RoutePlanRequest;
 
 @Service
 public class OtpClient {
