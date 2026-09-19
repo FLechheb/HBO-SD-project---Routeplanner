@@ -14,13 +14,9 @@ export async function planRoute(origin: Coordinate, destination: Coordinate) {
         }),
     });
 
-    if(response.status == 200){
-        console.log("message binnen")
+    if (!response.ok) {
+        throw new Error(`OTP-aanvraag mislukt: ${response.status}`);
     }
-    else{
-        console.log (response.status)
-    }  
     return response.json()
 }
-  // hier moet jij nog: response.ok checken, en bij falen een error gooien
-  // vervolgens: return response.json();
+
