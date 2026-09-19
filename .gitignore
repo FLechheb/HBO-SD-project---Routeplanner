@@ -71,7 +71,7 @@
 
 # Claude Code notes (personal study/memory use only, not part of the submission)
 CLAUDE.md
-school/
+/school/
 
 # OpenTripPlanner data (OSM/GTFS input + built graph.obj) - too large for git, shared via OneDrive
 backend/otp-data/

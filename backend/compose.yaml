@@ -6,7 +6,7 @@ services:
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
-      - '5432'
+      - '5434:5432'
 
   otp:
     image: 'opentripplanner/opentripplanner@sha256:36bdb5d57a5435d6da34f2adde18da62b338acfc465a9c0345ce64f74e355a0c'
