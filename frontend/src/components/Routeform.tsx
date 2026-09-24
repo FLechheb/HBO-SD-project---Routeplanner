@@ -15,6 +15,7 @@ interface RouteFormProps {
   toggleFacility: (facilityId: string) => void;
 
   onSubmit: (event: React.FormEvent) => void;
+  onFacilitiesClick: () => void;
 }
 
 const facilities = [
@@ -39,6 +40,7 @@ function RouteForm({
   setTime,
   toggleFacility,
   onSubmit,
+  onFacilitiesClick,
 }: RouteFormProps) {
   return (
     <form onSubmit={onSubmit}>
@@ -51,13 +53,11 @@ function RouteForm({
        >
          <option value="">Kies een vertrekstation</option>
 
-         {stations
-           .filter((station) => station !== departure)
-           .map((station) => (
-             <option key={station} value={station}>
-               {station}
-             </option>
-           ))}
+         {stations.map((station) => (
+           <option key={station} value={station}>
+             {station}
+           </option>
+         ))}
        </select>
       </div>
 
@@ -141,23 +141,16 @@ function RouteForm({
         </div>
       )}
 
-      <fieldset>
-        <legend>Benodigde voorzieningen</legend>
 
-        {facilities.map((facility) => (
-          <div key={facility.id}>
-            <input
-              id={facility.id}
-              type="checkbox"
-              checked={selectedFacilities.includes(facility.id)}
-              onChange={() => toggleFacility(facility.id)}
-            />
-            <label htmlFor={facility.id}>{facility.name}</label>
-          </div>
-        ))}
-      </fieldset>
 
-      <button type="submit">Plan mijn reis</button>
+     <button type="submit">Plan mijn reis</button>
+
+     <br />
+     <br />
+
+    <button type="button" onClick={onFacilitiesClick}>
+      Extra voorzieningen nodig?
+    </button>
     </form>
   );
 }
