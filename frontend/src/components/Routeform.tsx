@@ -18,12 +18,6 @@ interface RouteFormProps {
   onFacilitiesClick: () => void;
 }
 
-const facilities = [
-  { id: "lift", name: "Lift" },
-  { id: "roltrap", name: "Roltrap" },
-  { id: "hellingbaan", name: "Hellingbaan" },
-  { id: "geleidelijn", name: "Geleidelijn" },
-];
 
 function RouteForm({
     stations,
@@ -32,13 +26,11 @@ function RouteForm({
   timeMode,
   date,
   time,
-  selectedFacilities,
   setDeparture,
   setDestination,
   setTimeMode,
   setDate,
   setTime,
-  toggleFacility,
   onSubmit,
   onFacilitiesClick,
 }: RouteFormProps) {

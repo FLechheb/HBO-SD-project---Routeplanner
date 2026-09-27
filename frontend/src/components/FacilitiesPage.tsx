@@ -39,24 +39,24 @@ function FacilitiesPage({
 
       <label>
         <input type="checkbox"
-         checked={selectedFacilities.includes("Roltrap")}
-         onChange={() => toggleFacility("Roltrap")}
+         checked={selectedFacilities.includes("roltrap")}
+         onChange={() => toggleFacility("roltrap")}
         />
         Roltrap
       </label>
 
       <label>
         <input type="checkbox"
-         checked={selectedFacilities.includes("Hellingbaan")}
-         onChange={() => toggleFacility("Hellingbaan")}
+         checked={selectedFacilities.includes("hellingbaan")}
+         onChange={() => toggleFacility("hellingbaan")}
          />
         Hellingbaan
       </label>
 
       <label>
         <input type="checkbox"
-         checked={selectedFacilities.includes("Geleidelijn")}
-         onChange={() => toggleFacility("Geleidelijn")}
+         checked={selectedFacilities.includes("geleidelijn")}
+         onChange={() => toggleFacility("geleidelijn")}
          />
         Geleidelijn
       </label>

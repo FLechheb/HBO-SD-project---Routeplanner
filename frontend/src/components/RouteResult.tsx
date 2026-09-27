@@ -78,7 +78,7 @@ if (
 
       <p>
         <strong>Reistijd:</strong>{" "}
-        {calculateTravelTime(departureTime, arrivalTime)}
+        {calculateTravelTime(departureTime, arrivalTime, transferTime)}
       </p>
 
       {transferTime > 0 && (

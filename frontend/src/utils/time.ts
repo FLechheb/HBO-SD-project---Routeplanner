@@ -1,6 +1,7 @@
 export function calculateTravelTime(
   departureTime: string,
-  arrivalTime: string
+  arrivalTime: string,
+  extraMinutes = 0
 ) {
   const [departureHours, departureMinutes] =
     departureTime.split(":").map(Number);
@@ -8,14 +9,10 @@ export function calculateTravelTime(
   const [arrivalHours, arrivalMinutes] =
     arrivalTime.split(":").map(Number);
 
-  const departure =
-    departureHours * 60 + departureMinutes;
+  const departure = departureHours * 60 + departureMinutes;
+  const arrival = arrivalHours * 60 + arrivalMinutes;
 
-  const arrival =
-    arrivalHours * 60 + arrivalMinutes;
-
-const difference = arrival - departure;
-
+  const difference = arrival - departure + extraMinutes;
 
   const hours = Math.floor(difference / 60);
   const minutes = difference % 60;
