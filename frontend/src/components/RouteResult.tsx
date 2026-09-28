@@ -6,6 +6,7 @@ interface RouteResultProps {
   departure: string;
   destination: string;
   selectedFacilities: string[];
+  transferTime: number;
 }
 
 function RouteResult({
@@ -13,6 +14,7 @@ function RouteResult({
   departure,
   destination,
   selectedFacilities,
+  transferTime,
 }: RouteResultProps) {
   const departureStop = route.stops.find(
     (stop) => stop.stopName === departure
@@ -76,8 +78,14 @@ if (
 
       <p>
         <strong>Reistijd:</strong>{" "}
-        {calculateTravelTime(departureTime, arrivalTime)}
+        {calculateTravelTime(departureTime, arrivalTime, transferTime)}
       </p>
+
+      {transferTime > 0 && (
+        <p>
+          <strong>Extra overstaptijd:</strong> {transferTime} minuten
+        </p>
+      )}
 
       <h3>Voorzieningen</h3>
 

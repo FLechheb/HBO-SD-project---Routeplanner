@@ -4,6 +4,7 @@ import dummyRoute from "./Data/dummydata.json";
 import type { DummyRoute } from "./types/route.ts";
 import RouteResult from "./components/RouteResult.tsx";
 import RouteForm from "./components/Routeform";
+import FacilitiesPage from "./components/FacilitiesPage";
 
 const route: DummyRoute = dummyRoute;
 
@@ -14,6 +15,7 @@ type TimeMode = "now" | "departure" | "arrival";
 function App() {
   const [departure, setDeparture] = useState("");
   const [destination, setDestination] = useState("");
+  const [showFacilities, setShowFacilities] = useState(false);
 
   const [timeMode, setTimeMode] =
     useState<TimeMode>("now");
@@ -23,6 +25,8 @@ function App() {
 
   const [selectedFacilities, setSelectedFacilities] =
     useState<string[]>([]);
+
+  const [transferTime, setTransferTime] = useState(0);
 
   const [showResults, setShowResults] =
     useState(false);
@@ -39,6 +43,10 @@ function App() {
     });
   };
 
+const openFacilities = () => {
+  setShowFacilities(true);
+};
+
   const planJourney = (
     event: React.FormEvent
   ) => {
@@ -53,12 +61,25 @@ function App() {
       date,
       time,
       selectedFacilities,
+      transferTime,
     });
   };
 
  return (
    <main>
-     {!showResults ? (
+     {showFacilities ? (
+      <FacilitiesPage
+        onBack={() => setShowFacilities(false)}
+        onPlanJourney={() => {
+          setShowFacilities(false);
+          setShowResults(true);
+        }}
+        selectedFacilities={selectedFacilities}
+        toggleFacility={toggleFacility}
+        transferTime={transferTime}
+        setTransferTime={setTransferTime}
+      />
+     ) : !showResults ? (
        <>
          <h1>OV Reisplanner</h1>
 
@@ -82,6 +103,7 @@ function App() {
            setTime={setTime}
            toggleFacility={toggleFacility}
            onSubmit={planJourney}
+           onFacilitiesClick={openFacilities}
          />
        </>
      ) : (
@@ -95,6 +117,7 @@ function App() {
            departure={departure}
            destination={destination}
            selectedFacilities={selectedFacilities}
+           transferTime={transferTime}
          />
        </>
      )}

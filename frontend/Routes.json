@@ -1,77 +1,77 @@
 {
-  "Route": {
-  "lijnnummer": 1,
-  "Haltes": [
-    {
-      "Halte": 1,
-      "HalteNaam": "Utrecht",
-      "HalteAankomstTijd:": "10:00",
-      "HalteVertrekTijd": "10:05",
-      "HalteVoorziening": "Lift"
-    },
-    {
-      "HalteNummmer": 2,
-      "HalteNaam": "Amsterdam",
-      "HalteAankomstTijd:": "11:00",
-      "HalteVertrekTijd": "11:05",
-      "HalteVoorziening": "Geen"
-    },
-    {
-      "HalteNummmer": 3,
-      "HalteNaam": "Haarlem",
-      "HalteAankomstTijd:": "12:00",
-      "HalteVertrekTijd": "12:05",
-      "HalteVoorziening": "Geen"
-    },
-    {
-      "HalteNummmer": 4,
-      "HalteNaam": "Rotterdam",
-      "HalteAankomstTijd:": "13:00",
-      "HalteVertrekTijd": "13:15",
-      "HalteVoorziening": "Servicepunt"
-    },
-    {
-      "HalteNummmer": 5,
-      "HalteNaam": "Eindhoven",
-      "HalteAankomstTijd:": "16:00",
-      "HalteVertrekTijd": "16:15",
-      "HalteVoorziening": "Lift"
-    },
-    {
-      "HalteNummmer": 6,
-      "HalteNaam": "Maastricht",
-      "HalteAankomstTijd:": "10:45",
-      "HalteVertrekTijd": "10:55",
-      "HalteVoorziening": "Trap"
-    },
-    {
-      "HalteNummmer": 7,
-      "HalteNaam": "Den Haag",
-      "HalteAankomstTijd:": "17:10",
-      "HalteVertrekTijd": "17:30",
-      "HalteVoorziening": "Lift"
-    },
-    {
-      "HalteNummmer": 8,
-      "HalteNaam": "Zeeland",
-      "HalteAankomstTijd:": "15:20",
-      "HalteVertrekTijd": "15:30",
-      "HalteVoorziening": "Lift"
-    },
-    {
-      "HalteNummmer": 9,
-      "HalteNaam": "Zaandam",
-      "HalteAankomstTijd:": "19:10",
-      "HalteVertrekTijd": "19:20",
-      "HalteVoorziening": "Trappen"
-    },
-    {
-      "HalteNummmer": 10,
-      "HalteNaam": "Den Bosch",
-      "HalteAankomstTijd:": "14:35",
-      "HalteVertrekTijd": "14:45",
-      "HalteVoorziening": "Geen"
-    }
-  ]
-}
+  "route": {
+    "lijnnummer": 1,
+    "haltes": [
+      {
+        "halteNummer": 1,
+        "halteNaam": "Utrecht",
+        "halteAankomstTijd": "10:00",
+        "halteVertrekTijd": "10:05",
+        "halteVoorziening": "Lift"
+      },
+      {
+        "halteNummer": 2,
+        "halteNaam": "Amsterdam",
+        "halteAankomstTijd": "11:00",
+        "halteVertrekTijd": "11:05",
+        "halteVoorziening": "Geen"
+      },
+      {
+        "halteNummer": 3,
+        "halteNaam": "Haarlem",
+        "halteAankomstTijd": "12:00",
+        "halteVertrekTijd": "12:05",
+        "halteVoorziening": "Geen"
+      },
+      {
+        "halteNummer": 4,
+        "halteNaam": "Rotterdam",
+        "halteAankomstTijd": "13:00",
+        "halteVertrekTijd": "13:15",
+        "halteVoorziening": "Servicepunt"
+      },
+      {
+        "halteNummer": 5,
+        "halteNaam": "Eindhoven",
+        "halteAankomstTijd": "16:00",
+        "halteVertrekTijd": "16:15",
+        "halteVoorziening": "Lift"
+      },
+      {
+        "halteNummer": 6,
+        "halteNaam": "Maastricht",
+        "halteAankomstTijd": "10:45",
+        "halteVertrekTijd": "10:55",
+        "halteVoorziening": "Trap"
+      },
+      {
+        "halteNummer": 7,
+        "halteNaam": "Den Haag",
+        "halteAankomstTijd": "17:10",
+        "halteVertrekTijd": "17:30",
+        "halteVoorziening": "Lift"
+      },
+      {
+        "halteNummer": 8,
+        "halteNaam": "Vlissingen",
+        "halteAankomstTijd": "15:20",
+        "halteVertrekTijd": "15:30",
+        "halteVoorziening": "Lift"
+      },
+      {
+        "halteNummer": 9,
+        "halteNaam": "Zaandam",
+        "halteAankomstTijd": "19:10",
+        "halteVertrekTijd": "19:20",
+        "halteVoorziening": "Trappen"
+      },
+      {
+        "halteNummer": 10,
+        "halteNaam": "Den Bosch",
+        "halteAankomstTijd": "14:35",
+        "halteVertrekTijd": "14:45",
+        "halteVoorziening": "Geen"
+      }
+    ]
+  }
 }
