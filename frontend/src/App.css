@@ -195,3 +195,61 @@ section + button {
   display: flex !important;
   margin: 0 !important;
 }
+
+.main-navigation {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.profile-page {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-form {
+  padding: 0;
+  background: transparent;
+}
+
+.profile-form fieldset {
+  margin: 0 0 24px;
+}
+
+.profile-form fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  color: #172033;
+  font-weight: normal;
+}
+
+.profile-form input[type="checkbox"],
+.profile-form input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+}
+
+.profile-actions button[type="button"] {
+  background: #e5e7eb;
+  color: #172033;
+}
+
+.profile-actions button[type="button"]:hover {
+  background: #c8d2df;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}

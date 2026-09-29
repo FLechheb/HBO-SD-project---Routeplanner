@@ -1,26 +1,24 @@
 interface RouteFormProps {
-    stations: string[];
+  stations: string[];
   departure: string;
   destination: string;
   timeMode: "now" | "departure" | "arrival";
   date: string;
   time: string;
-  selectedFacilities: string[];
 
   setDeparture: (value: string) => void;
   setDestination: (value: string) => void;
   setTimeMode: (value: "now" | "departure" | "arrival") => void;
   setDate: (value: string) => void;
   setTime: (value: string) => void;
-  toggleFacility: (facilityId: string) => void;
 
   onSubmit: (event: React.FormEvent) => void;
-  onFacilitiesClick: () => void;
+  onProfileClick: () => void;
 }
 
 
 function RouteForm({
-    stations,
+  stations,
   departure,
   destination,
   timeMode,
@@ -32,7 +30,7 @@ function RouteForm({
   setDate,
   setTime,
   onSubmit,
-  onFacilitiesClick,
+  onProfileClick,
 }: RouteFormProps) {
   return (
     <form onSubmit={onSubmit}>
@@ -135,14 +133,16 @@ function RouteForm({
 
 
 
-     <button type="submit">Plan mijn reis</button>
+     <div className="form-actions">
+      <button type="submit">
+        Plan mijn reis
+      </button>
 
-     <br />
-     <br />
+      <button type="button" onClick={onProfileClick}>
+        Mijn profiel
+      </button>
+    </div>
 
-    <button type="button" onClick={onFacilitiesClick}>
-      Extra voorzieningen nodig?
-    </button>
     </form>
   );
 }
