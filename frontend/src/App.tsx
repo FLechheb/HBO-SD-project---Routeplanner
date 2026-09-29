@@ -1,25 +1,34 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import "./App.css";
 import dummyRoute from "./Data/dummydata.json";
 import type { DummyRoute } from "./types/route.ts";
 import RouteResult from "./components/RouteResult.tsx";
 import RouteForm from "./components/Routeform";
+import type { ApiStop } from "./types/route.ts";
+import { fetchStops } from "./services/stopService.ts"
 
 const route: DummyRoute = dummyRoute;
 
-const stations = route.stops.map((stop) => stop.stopName);
-console.log(stations);
+
 type TimeMode = "now" | "departure" | "arrival";
 
 function App() {
   const [departure, setDeparture] = useState("");
   const [destination, setDestination] = useState("");
+  const [stops, setStops] = useState<ApiStop[]>([]);
+  useEffect(() => {
+    fetchStops()
+        .then(setStops)
+        .catch(console.error);
+}, []);
 
   const [timeMode, setTimeMode] =
-    useState<TimeMode>("now");
+    useState<TimeMode>("now"); 
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+
+  const stations = stops.map((stop) => stop.name);
 
   const [selectedFacilities, setSelectedFacilities] =
     useState<string[]>([]);

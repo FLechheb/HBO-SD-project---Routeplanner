@@ -20,3 +20,8 @@ export interface Coordinate {
     lat: string;
     lon: string;
 }
+
+export interface ApiStop {
+  name: string;
+  stopCode: string;
+}

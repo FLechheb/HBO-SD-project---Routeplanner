@@ -33,7 +33,7 @@ public class StopDAO {
       StopNavigation stopNavigation = mapper.readValue(invoer, StopNavigation.class);
       return stopNavigation.stops();
     } catch (IOException e) {
-      throw new UncheckedIOException("foutmelding voor inlezen bestand", e);
+      throw new UncheckedIOException("Could not read stop-navigation.json", e);
     }
   }
 }
