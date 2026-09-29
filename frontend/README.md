@@ -1,5 +1,13 @@
 # React + TypeScript + Vite
 
+## Environment variables
+
+Copy `.env.example` to `.env` and set the backend URL without a trailing slash:
+
+```dotenv
+VITE_API_URL=http://localhost:8080
+```
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
