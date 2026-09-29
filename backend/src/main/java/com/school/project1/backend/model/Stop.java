@@ -1,5 +1,4 @@
 package com.school.project1.backend.model;
 
-public class Stop {
-  
+public record Stop(String stopCode, String name) {
 }

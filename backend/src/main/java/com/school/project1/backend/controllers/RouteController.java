@@ -3,6 +3,7 @@ package com.school.project1.backend.controllers;
 import com.school.project1.backend.model.RoutePlanRequest;
 import com.school.project1.backend.model.Stop;
 import com.school.project1.backend.service.RouteService;
+import com.school.project1.backend.service.StopService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,14 +18,16 @@ import java.util.List;
 public class RouteController {
   
   private final RouteService routeService;
+  private final StopService stopService;
 
-  public RouteController(RouteService routeService) {
+  public RouteController(RouteService routeService, StopService stopService) {
     this.routeService = routeService;
+    this.stopService = stopService;
   }
 
-  @GetMapping 
+  @GetMapping
   public List<Stop> getStops() {
-    return routeService.getStops();
+    return stopService.getStops();
   }
 
   @PostMapping(value = "/plan", produces = MediaType.APPLICATION_JSON_VALUE)
