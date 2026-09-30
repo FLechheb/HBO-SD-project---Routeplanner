@@ -1,0 +1,1248 @@
+{
+  "meta": {
+    "description": "Mock data: één treinlijn met tien haltes. Per halte alleen voorzieningen die relevant zijn voor reizigers die slecht ter been zijn, met een stapvrije looproute vanaf het aankomstspoor. Veldnamen zijn Engels, inhoud is Nederlands.",
+    "targetAudience": "Reizigers die slecht ter been zijn (rollator, rolstoel, scootmobiel, beperkt uithoudingsvermogen)",
+    "version": "3.0",
+    "generatedOn": "2026-09-22",
+    "isMock": true,
+    "facilityTypes": [
+      "lift",
+      "hellingbaan",
+      "toegankelijk_toilet",
+      "reisassistentie",
+      "servicebalie",
+      "wachtruimte_met_zitplaatsen",
+      "zitplaatsen_perron",
+      "taxistandplaats",
+      "kiss_and_ride",
+      "gehandicaptenparkeerplaats",
+      "bushalte_lage_instap",
+      "scootmobiel_oplaadpunt"
+    ],
+    "walkingRouteFields": {
+      "stepFree": "true als de looproute zonder traptreden of hoge drempels af te leggen is",
+      "levelChange": "hoe een niveauverschil wordt overbrugd: geen, lift of hellingbaan",
+      "seatsAlongRoute": "aantal plekken op de looproute waar je even kunt zitten",
+      "surface": "verhard, tegels, asfalt of gemengd"
+    }
+  },
+  "line": {
+    "id": "SPR-4700",
+    "name": "Sprinter Utrecht Centraal - Zwolle",
+    "operator": "MockRail",
+    "rollingStock": "SNG (gelijkvloerse instap)",
+    "direction": "Zwolle",
+    "stops": [
+      {
+        "sequence": 1,
+        "stationCode": "UT",
+        "name": "Utrecht Centraal",
+        "arrivalPlatform": null,
+        "departurePlatform": "4",
+        "arrivalTime": null,
+        "departureTime": "10:02",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "ut-lift-1",
+            "type": "lift",
+            "name": "Lift spoor 4 naar stationshal",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "4",
+              "walkingDistanceMeters": 45,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Loop vanuit de uitstapzone richting de kop van spoor 4 (richting Amersfoort)",
+                "De lift staat achter de glazen wachtruimte, herkenbaar aan het blauwe liftbord",
+                "Druk op de knop voor de stationshal (niveau 1)"
+              ]
+            }
+          },
+          {
+            "id": "ut-toilet-1",
+            "type": "toegankelijk_toilet",
+            "name": "Rolstoeltoegankelijk toilet stationshal",
+            "openingHours": "24/7",
+            "paid": true,
+            "note": "Te openen met Eurokey of via de intercom bij de deur",
+            "walkingRoute": {
+              "fromPlatform": "4",
+              "walkingDistanceMeters": 160,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift aan de kop van spoor 4 omhoog naar de stationshal",
+                "Sla bij het verlaten van de lift rechtsaf richting de centrumzijde",
+                "Loop langs de bankjes aan de rechterkant; hier kun je even zitten",
+                "Het toegankelijke toilet heeft een aparte deur links naast de gewone toiletten"
+              ]
+            }
+          },
+          {
+            "id": "ut-reisassistentie-1",
+            "type": "reisassistentie",
+            "name": "Ontmoetingspunt Reisassistentie",
+            "openingHours": "06:00-23:30",
+            "paid": false,
+            "note": "Minimaal 1 uur van tevoren aanmelden via de app of telefoon",
+            "walkingRoute": {
+              "fromPlatform": "4",
+              "walkingDistanceMeters": 190,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift aan de kop van spoor 4 omhoog naar de stationshal",
+                "Loop rechtdoor richting de Jaarbeurszijde",
+                "Het ontmoetingspunt is de balie met het rolstoelsymbool, rechts naast de poortjes"
+              ]
+            }
+          },
+          {
+            "id": "ut-taxi-1",
+            "type": "taxistandplaats",
+            "name": "Taxistandplaats Jaarbeurszijde",
+            "openingHours": "24/7",
+            "paid": null,
+            "note": "Rolstoeltaxi op aanvraag bij de standplaatsbeheerder",
+            "walkingRoute": {
+              "fromPlatform": "4",
+              "walkingDistanceMeters": 280,
+              "walkingTimeMinutes": 5,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 3,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift aan de kop van spoor 4 omhoog naar de stationshal",
+                "Loop rechtdoor richting de Jaarbeurszijde en ga door het brede poortje met het rolstoelsymbool",
+                "Neem buiten de lift omlaag naar straatniveau",
+                "De taxistandplaats ligt direct links van de liftuitgang"
+              ]
+            }
+          },
+          {
+            "id": "ut-kissride-1",
+            "type": "kiss_and_ride",
+            "name": "Kiss & Ride Jaarbeurszijde",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "4",
+              "walkingDistanceMeters": 300,
+              "walkingTimeMinutes": 5,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 3,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift aan de kop van spoor 4 omhoog naar de stationshal",
+                "Loop richting de Jaarbeurszijde en ga door het brede poortje",
+                "Neem buiten de lift omlaag naar straatniveau",
+                "De Kiss & Ride-strook ligt rechts, na de taxistandplaats"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 2,
+        "stationCode": "AMF",
+        "name": "Amersfoort Centraal",
+        "arrivalPlatform": "3",
+        "departurePlatform": "3",
+        "arrivalTime": "10:17",
+        "departureTime": "10:19",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "amf-lift-1",
+            "type": "lift",
+            "name": "Lift spoor 3 naar passage",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 40,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Loop richting de kop van spoor 3 (richting Utrecht)",
+                "De lift bevindt zich achter het wachthuisje, naast de bankjes"
+              ]
+            }
+          },
+          {
+            "id": "amf-toilet-1",
+            "type": "toegankelijk_toilet",
+            "name": "Rolstoeltoegankelijk toilet stationshal",
+            "openingHours": "05:30-00:30",
+            "paid": true,
+            "note": "Eurokey of muntje bij de servicebalie",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 130,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift aan de kop van spoor 3 omlaag naar de passage",
+                "Sla rechtsaf richting de stationshal",
+                "Het toegankelijke toilet zit rechts, direct naast de kiosk, met een aparte brede deur"
+              ]
+            }
+          },
+          {
+            "id": "amf-wachtruimte-1",
+            "type": "wachtruimte_met_zitplaatsen",
+            "name": "Verwarmde wachtruimte spoor 3",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Ruimte voor rolstoel of rollator, automatische schuifdeur",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 25,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De wachtruimte staat in het midden van spoor 3, direct naast de uitstapzone"
+              ]
+            }
+          },
+          {
+            "id": "amf-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Busstation centrumzijde",
+            "openingHours": "24/7",
+            "paid": null,
+            "note": "Alle perrons hebben verhoogde stoepranden voor gelijkvloers instappen",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 190,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift aan de kop van spoor 3 omlaag naar de passage",
+                "Loop richting de centrumzijde en ga door het brede poortje",
+                "Het busstation ligt direct rechts na de uitgang, gelijkvloers"
+              ]
+            }
+          },
+          {
+            "id": "amf-taxi-1",
+            "type": "taxistandplaats",
+            "name": "Taxistandplaats Stationsplein",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 200,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift aan de kop van spoor 3 omlaag naar de passage",
+                "Loop richting de centrumzijde en ga door het brede poortje",
+                "Sla linksaf; de taxi's staan langs de gevel van het stationsgebouw"
+              ]
+            }
+          },
+          {
+            "id": "amf-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen Stationsplein",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "4 plaatsen, alleen met gehandicaptenparkeerkaart",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 230,
+              "walkingTimeMinutes": 4,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de lift aan de kop van spoor 3 omlaag naar de passage",
+                "Loop richting de centrumzijde en ga door het brede poortje",
+                "Steek het Stationsplein over via de verlaagde stoeprand",
+                "De parkeerplaatsen liggen rechts naast de ingang van de fietsenstalling"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 3,
+        "stationCode": "NKK",
+        "name": "Nijkerk",
+        "arrivalPlatform": "2",
+        "departurePlatform": "2",
+        "arrivalTime": "10:27",
+        "departureTime": "10:28",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "nkk-hellingbaan-1",
+            "type": "hellingbaan",
+            "name": "Hellingbaan spoor 2 naar tunnel",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Hellingspercentage circa 5%, leuning aan beide zijden",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 35,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Loop richting de kop van spoor 2 (richting Zwolle)",
+                "De hellingbaan begint links van de trap, achter het bankje"
+              ]
+            }
+          },
+          {
+            "id": "nkk-zitplaatsen-1",
+            "type": "zitplaatsen_perron",
+            "name": "Zitbanken onder overkapping spoor 2",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 10,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De banken staan direct naast de uitstapzone, onder de overkapping"
+              ]
+            }
+          },
+          {
+            "id": "nkk-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Bushalte Stationsweg",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 130,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 1,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 2 omlaag naar de tunnel",
+                "Loop door de tunnel naar de stationszijde en neem daar opnieuw de hellingbaan omhoog",
+                "Sla rechtsaf; de bushalte ligt aan de Stationsweg, direct voor het station"
+              ]
+            }
+          },
+          {
+            "id": "nkk-kissride-1",
+            "type": "kiss_and_ride",
+            "name": "Kiss & Ride stationszijde",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 110,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 1,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 2 omlaag naar de tunnel",
+                "Loop door de tunnel en neem de hellingbaan omhoog aan de stationszijde",
+                "De Kiss & Ride-strook ligt direct links van de uitgang"
+              ]
+            }
+          },
+          {
+            "id": "nkk-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen P+R",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "2 plaatsen",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 140,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 1,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 2 omlaag naar de tunnel",
+                "Loop door de tunnel en neem de hellingbaan omhoog aan de stationszijde",
+                "Sla linksaf langs de Kiss & Ride; de plaatsen liggen vooraan op het P+R-terrein"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 4,
+        "stationCode": "PT",
+        "name": "Putten",
+        "arrivalPlatform": "1",
+        "departurePlatform": "1",
+        "arrivalTime": "10:34",
+        "departureTime": "10:35",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "pt-hellingbaan-1",
+            "type": "hellingbaan",
+            "name": "Hellingbaan spoor 1 naar Stationsstraat",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 20,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De hellingbaan begint in het midden van spoor 1, direct naast de uitstapzone"
+              ]
+            }
+          },
+          {
+            "id": "pt-wachtruimte-1",
+            "type": "wachtruimte_met_zitplaatsen",
+            "name": "Wachtruimte perron",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Glazen abri met 4 zitplaatsen en ruimte voor een rolstoel",
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 15,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De wachtruimte staat in het midden van spoor 1, naast de hellingbaan"
+              ]
+            }
+          },
+          {
+            "id": "pt-kissride-1",
+            "type": "kiss_and_ride",
+            "name": "Kiss & Ride Stationsstraat",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 60,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 0,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de hellingbaan in het midden van spoor 1 omlaag naar de Stationsstraat",
+                "De Kiss & Ride-strook ligt direct rechts onderaan de hellingbaan"
+              ]
+            }
+          },
+          {
+            "id": "pt-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen P+R Putten",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "2 plaatsen, dicht bij de hellingbaan",
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 80,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 0,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de hellingbaan omlaag naar de Stationsstraat",
+                "Sla linksaf; de gehandicaptenplaatsen liggen vooraan op het parkeerterrein, naast het bord P+R"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 5,
+        "stationCode": "EML",
+        "name": "Ermelo",
+        "arrivalPlatform": "2",
+        "departurePlatform": "2",
+        "arrivalTime": "10:40",
+        "departureTime": "10:41",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "eml-overweg-1",
+            "type": "hellingbaan",
+            "name": "Gelijkvloerse perronovergang",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Overweg met rubberen platen, geen niveauverschil; wacht bij rood licht",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 50,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Loop richting de kop van spoor 2 (richting Utrecht)",
+                "De overgang naar het stationsgebouw ligt aan het einde van het perron, na het bankje"
+              ]
+            }
+          },
+          {
+            "id": "eml-zitplaatsen-1",
+            "type": "zitplaatsen_perron",
+            "name": "Zitbanken spoor 2",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 10,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De banken staan onder de overkapping, direct naast de uitstapzone"
+              ]
+            }
+          },
+          {
+            "id": "eml-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Bushalte Station Ermelo",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 120,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Loop naar de perronovergang aan de kop van spoor 2 en steek gelijkvloers over",
+                "Loop langs het stationsgebouw naar het Stationsplein; bij de ingang staat een bankje",
+                "De bushalte ligt aan de overkant van het plein, bereikbaar via de verlaagde stoeprand"
+              ]
+            }
+          },
+          {
+            "id": "eml-taxi-1",
+            "type": "taxistandplaats",
+            "name": "Taxistandplaats Stationsplein",
+            "openingHours": "24/7",
+            "paid": null,
+            "note": "Buiten kantooruren taxi bellen; wachtplek met bank bij het stationsgebouw",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 90,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Steek de perronovergang aan de kop van spoor 2 gelijkvloers over",
+                "Loop langs het stationsgebouw naar het plein",
+                "De taxistandplaats ligt direct rechts voor het stationsgebouw"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 6,
+        "stationCode": "HD",
+        "name": "Harderwijk",
+        "arrivalPlatform": "3",
+        "departurePlatform": "3",
+        "arrivalTime": "10:47",
+        "departureTime": "10:49",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "hd-lift-1",
+            "type": "lift",
+            "name": "Lift spoor 3 naar tunnel",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 30,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "De lift staat in het midden van spoor 3, naast de trap naar de tunnel en de wachtruimte"
+              ]
+            }
+          },
+          {
+            "id": "hd-toilet-1",
+            "type": "toegankelijk_toilet",
+            "name": "Rolstoeltoegankelijk toilet tunnel",
+            "openingHours": "05:30-00:00",
+            "paid": true,
+            "note": "Eurokey; steunbeugels en alarmknop aanwezig",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 100,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift in het midden van spoor 3 omlaag naar de reizigerstunnel",
+                "Sla rechtsaf richting de centrumzijde",
+                "Het toegankelijke toilet zit halverwege de tunnel aan de linkerkant, aparte brede deur"
+              ]
+            }
+          },
+          {
+            "id": "hd-reisassistentie-1",
+            "type": "reisassistentie",
+            "name": "Ontmoetingspunt Reisassistentie",
+            "openingHours": "06:30-22:30",
+            "paid": false,
+            "note": "Bij de servicebalie centrumzijde",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 140,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift in het midden van spoor 3 omlaag naar de tunnel",
+                "Loop richting de centrumzijde, langs de bankjes",
+                "Het ontmoetingspunt is bij de balie links voor de poortjes, herkenbaar aan het rolstoelsymbool"
+              ]
+            }
+          },
+          {
+            "id": "hd-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Busstation Harderwijk",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 160,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop naar de centrumzijde en ga door het brede poortje",
+                "Het busstation ligt recht voor je, gelijkvloers en met verhoogde haltes"
+              ]
+            }
+          },
+          {
+            "id": "hd-taxi-1",
+            "type": "taxistandplaats",
+            "name": "Taxistandplaats Stationslaan",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 170,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop naar de centrumzijde en ga door het brede poortje",
+                "Sla rechtsaf; de taxi's staan langs de Stationslaan, 30 meter verderop"
+              ]
+            }
+          },
+          {
+            "id": "hd-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen Stationslaan",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "3 plaatsen",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 200,
+              "walkingTimeMinutes": 4,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop naar de centrumzijde en ga door het brede poortje",
+                "Sla rechtsaf en loop langs de taxistandplaats; de parkeerplaatsen liggen daarachter aan de Stationslaan"
+              ]
+            }
+          },
+          {
+            "id": "hd-oplaadpunt-1",
+            "type": "scootmobiel_oplaadpunt",
+            "name": "Oplaadpunt scootmobiel",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Standaard stopcontact met bank ernaast, in de tunnel",
+            "walkingRoute": {
+              "fromPlatform": "3",
+              "walkingDistanceMeters": 80,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Sla linksaf richting de Zeezijde",
+                "Het oplaadpunt zit in de nis rechts, naast de bank"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 7,
+        "stationCode": "NS",
+        "name": "Nunspeet",
+        "arrivalPlatform": "2",
+        "departurePlatform": "2",
+        "arrivalTime": "10:57",
+        "departureTime": "10:58",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "ns-hellingbaan-1",
+            "type": "hellingbaan",
+            "name": "Hellingbaan spoor 2 naar tunnel",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Lange hellingbaan met tussenbordes en bankje halverwege",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 40,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "Loop richting de kop van spoor 2 (richting Utrecht)",
+                "De hellingbaan begint rechts van de trap"
+              ]
+            }
+          },
+          {
+            "id": "ns-wachtruimte-1",
+            "type": "wachtruimte_met_zitplaatsen",
+            "name": "Wachtruimte spoor 2",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 20,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De wachtruimte staat op spoor 2, ongeveer 20 meter richting Zwolle vanaf de uitstapzone"
+              ]
+            }
+          },
+          {
+            "id": "ns-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Bushalte Stationsplein",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 120,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 2 omlaag naar de tunnel; halverwege staat een bankje",
+                "Loop door de tunnel naar de dorpszijde en neem daar de hellingbaan omhoog",
+                "Steek het Stationsplein over via de verlaagde stoeprand; de bushalte ligt bij de rotonde"
+              ]
+            }
+          },
+          {
+            "id": "ns-taxi-1",
+            "type": "taxistandplaats",
+            "name": "Taxistandplaats Stationsplein",
+            "openingHours": "24/7",
+            "paid": null,
+            "note": "Op afroep; wachtbank bij de uitgang van de tunnel",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 100,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 2,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 2 omlaag naar de tunnel",
+                "Loop door de tunnel naar de dorpszijde en neem de hellingbaan omhoog",
+                "De taxistandplaats ligt direct links van de uitgang"
+              ]
+            }
+          },
+          {
+            "id": "ns-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen Stationsplein",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "2 plaatsen",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 110,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 2,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de hellingbaan omlaag naar de tunnel en aan de dorpszijde weer omhoog",
+                "Sla rechtsaf; de plaatsen liggen naast het stationsgebouw, herkenbaar aan het blauwe bord"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 8,
+        "stationCode": "HDE",
+        "name": "'t Harde",
+        "arrivalPlatform": "1",
+        "departurePlatform": "1",
+        "arrivalTime": "11:04",
+        "departureTime": "11:05",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "hde-hellingbaan-1",
+            "type": "hellingbaan",
+            "name": "Hellingbaan spoor 1 naar Stationsweg",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 30,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Loop richting de kop van spoor 1 (richting Utrecht), langs de zitbank",
+                "De hellingbaan begint naast de kaartautomaat onder de overkapping"
+              ]
+            }
+          },
+          {
+            "id": "hde-zitplaatsen-1",
+            "type": "zitplaatsen_perron",
+            "name": "Zitbanken onder overkapping",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 15,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De banken staan onder de overkapping, 15 meter richting Utrecht vanaf de uitstapzone"
+              ]
+            }
+          },
+          {
+            "id": "hde-kissride-1",
+            "type": "kiss_and_ride",
+            "name": "Kiss & Ride Stationsweg",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 70,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 1,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 1 omlaag",
+                "De Kiss & Ride-strook ligt direct rechts onderaan de hellingbaan"
+              ]
+            }
+          },
+          {
+            "id": "hde-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen station",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "1 plaats",
+            "walkingRoute": {
+              "fromPlatform": "1",
+              "walkingDistanceMeters": 80,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "hellingbaan",
+              "seatsAlongRoute": 1,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de hellingbaan aan de kop van spoor 1 omlaag",
+                "Sla rechtsaf; de plaats ligt vooraan op het parkeerterrein, direct na de Kiss & Ride"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 9,
+        "stationCode": "WZ",
+        "name": "Wezep",
+        "arrivalPlatform": "2",
+        "departurePlatform": "2",
+        "arrivalTime": "11:10",
+        "departureTime": "11:11",
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "wz-overweg-1",
+            "type": "hellingbaan",
+            "name": "Gelijkvloerse overweg naar Stationsweg",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Overweg met rubberen platen; wacht bij gesloten bomen",
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 40,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "Loop richting de kop van spoor 2 (richting Zwolle), langs de wachtruimte",
+                "Het perron loopt via een flauwe helling af naar de overweg"
+              ]
+            }
+          },
+          {
+            "id": "wz-wachtruimte-1",
+            "type": "wachtruimte_met_zitplaatsen",
+            "name": "Wachtruimte spoor 2",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 30,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 0,
+              "surface": "tegels",
+              "steps": [
+                "De wachtruimte staat aan de kop van spoor 2, richting Zwolle"
+              ]
+            }
+          },
+          {
+            "id": "wz-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Bushalte Station Wezep",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 100,
+              "walkingTimeMinutes": 2,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "gemengd",
+              "steps": [
+                "Loop naar de overweg aan de kop van spoor 2 en steek gelijkvloers over naar de Stationsweg",
+                "Sla linksaf; de bushalte ligt 40 meter verderop en heeft een verhoogde stoeprand"
+              ]
+            }
+          },
+          {
+            "id": "wz-kissride-1",
+            "type": "kiss_and_ride",
+            "name": "Kiss & Ride Stationsweg",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "2",
+              "walkingDistanceMeters": 70,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "gemengd",
+              "steps": [
+                "Loop naar de overweg aan de kop van spoor 2 en steek gelijkvloers over",
+                "De Kiss & Ride-strook ligt direct rechts na de overweg"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "sequence": 10,
+        "stationCode": "ZL",
+        "name": "Zwolle",
+        "arrivalPlatform": "6",
+        "departurePlatform": null,
+        "arrivalTime": "11:20",
+        "departureTime": null,
+        "stepFreeAccessible": true,
+        "facilities": [
+          {
+            "id": "zl-lift-1",
+            "type": "lift",
+            "name": "Lift spoor 6 naar tunnel",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 35,
+              "walkingTimeMinutes": 1,
+              "stepFree": true,
+              "levelChange": "geen",
+              "seatsAlongRoute": 1,
+              "surface": "tegels",
+              "steps": [
+                "De lift staat in het midden van spoor 6, naast de roltrap en de bankjes"
+              ]
+            }
+          },
+          {
+            "id": "zl-toilet-1",
+            "type": "toegankelijk_toilet",
+            "name": "Rolstoeltoegankelijk toilet stationshal",
+            "openingHours": "24/7",
+            "paid": true,
+            "note": "Eurokey of via intercom; verschoonplek voor volwassenen aanwezig",
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 160,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift in het midden van spoor 6 omlaag naar de reizigerstunnel",
+                "Sla rechtsaf richting de stationshal (centrumzijde); halverwege staan bankjes",
+                "Het toegankelijke toilet zit in de hal, links naast de bloemenzaak, aparte brede deur"
+              ]
+            }
+          },
+          {
+            "id": "zl-reisassistentie-1",
+            "type": "reisassistentie",
+            "name": "Ontmoetingspunt Reisassistentie",
+            "openingHours": "06:00-23:30",
+            "paid": false,
+            "note": "Bij de servicebalie in de stationshal",
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 190,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop richting de stationshal aan de centrumzijde",
+                "Het ontmoetingspunt is de balie tegenover de poortjes, herkenbaar aan het rolstoelsymbool"
+              ]
+            }
+          },
+          {
+            "id": "zl-wachtruimte-1",
+            "type": "wachtruimte_met_zitplaatsen",
+            "name": "Wachtruimte stationshal",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "Verwarmd, 20 zitplaatsen, ruimte voor rolstoelen",
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 180,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop richting de stationshal aan de centrumzijde",
+                "De wachtruimte ligt rechts van de servicebalie, automatische deur"
+              ]
+            }
+          },
+          {
+            "id": "zl-bus-1",
+            "type": "bushalte_lage_instap",
+            "name": "Busstation Zwolle (zuidzijde)",
+            "openingHours": "24/7",
+            "paid": null,
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 250,
+              "walkingTimeMinutes": 4,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 3,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Sla linksaf richting de zuidzijde (Hanzeland) en ga door het brede poortje",
+                "Het busstation ligt recht voor de uitgang, gelijkvloers met verhoogde haltes"
+              ]
+            }
+          },
+          {
+            "id": "zl-taxi-1",
+            "type": "taxistandplaats",
+            "name": "Taxistandplaats Stationsplein",
+            "openingHours": "24/7",
+            "paid": null,
+            "note": "Rolstoeltaxi op aanvraag",
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 220,
+              "walkingTimeMinutes": 4,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 3,
+              "surface": "gemengd",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop naar de stationshal aan de centrumzijde en ga door het brede poortje",
+                "De taxi's staan rechts op het Stationsplein, bereikbaar via de verlaagde stoeprand"
+              ]
+            }
+          },
+          {
+            "id": "zl-parkeren-1",
+            "type": "gehandicaptenparkeerplaats",
+            "name": "Gehandicaptenparkeerplaatsen Stationsplein",
+            "openingHours": "24/7",
+            "paid": false,
+            "note": "5 plaatsen, maximaal 3 uur met parkeerschijf",
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 240,
+              "walkingTimeMinutes": 4,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 3,
+              "surface": "asfalt",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop naar de stationshal aan de centrumzijde en ga door het brede poortje",
+                "Sla linksaf op het Stationsplein; de plaatsen liggen naast de ingang van de fietsenstalling"
+              ]
+            }
+          },
+          {
+            "id": "zl-oplaadpunt-1",
+            "type": "scootmobiel_oplaadpunt",
+            "name": "Oplaadpunt scootmobiel wachtruimte",
+            "openingHours": "24/7",
+            "paid": false,
+            "walkingRoute": {
+              "fromPlatform": "6",
+              "walkingDistanceMeters": 185,
+              "walkingTimeMinutes": 3,
+              "stepFree": true,
+              "levelChange": "lift",
+              "seatsAlongRoute": 2,
+              "surface": "tegels",
+              "steps": [
+                "Neem de lift omlaag naar de tunnel",
+                "Loop naar de stationshal aan de centrumzijde",
+                "Ga de wachtruimte rechts van de servicebalie binnen; het oplaadpunt zit achterin bij de gereserveerde rolstoelplek"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
