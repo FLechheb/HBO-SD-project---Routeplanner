@@ -1,7 +1,7 @@
 package com.school.project1.backend.controllers;
 
-import com.school.project1.backend.dto.RouteStopResponse;
-import com.school.project1.backend.service.RouteService;
+import com.school.project1.backend.model.Stop;
+import com.school.project1.backend.service.StopService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,14 +12,14 @@ import java.util.List;
 @RequestMapping("/api/routes")
 public class RouteController {
 
-    private final RouteService routeService;
+    private final StopService stopService;
 
-    public RouteController(RouteService routeService) {
-        this.routeService = routeService;
+    public RouteController(StopService stopService) {
+        this.stopService = stopService;
     }
 
     @GetMapping
-    public List<RouteStopResponse> getStops() {
-        return routeService.getStops();
+    public List<Stop> getStops() {
+        return stopService.getStops();
     }
 }

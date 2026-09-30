@@ -20,16 +20,14 @@ class RouteControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void returnsOrderedStopsFromTheStandardRoute() throws Exception {
+    void returnsStopsFromTheMockJson() throws Exception {
         mockMvc.perform(get("/api/routes"))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
             .andExpect(jsonPath("$.length()").value(10))
-            .andExpect(jsonPath("$[0].stopNumber").value(1))
-            .andExpect(jsonPath("$[0].stopName").value("Utrecht Centraal"))
-            .andExpect(jsonPath("$[0].arrivalTime").value("10:00"))
-            .andExpect(jsonPath("$[0].facility").value("lift"))
-            .andExpect(jsonPath("$[9].stopNumber").value(10))
-            .andExpect(jsonPath("$[9].stopName").value("Amsterdam Centraal"));
+            .andExpect(jsonPath("$[0].stopCode").value("UT"))
+            .andExpect(jsonPath("$[0].name").value("Utrecht Centraal"))
+            .andExpect(jsonPath("$[9].stopCode").value("ZL"))
+            .andExpect(jsonPath("$[9].name").value("Zwolle"));
     }
 }

@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "description": "Standaard mocklijn met beide rijrichtingen voor frontendontwikkeling",
+    "version": "4.0",
+    "generatedOn": "2026-09-29",
+    "isMock": true
+  },
+  "defaultJourney": {
+    "directionId": "SPR-4700-UT-ZL",
+    "fromStopCode": "UT",
+    "toStopCode": "ZL"
+  },
+  "line": {
+    "id": "SPR-4700",
+    "name": "Sprinter Utrecht Centraal - Zwolle",
+    "operator": "MockRail",
+    "rollingStock": "SNG (gelijkvloerse instap)",
+    "directions": [
+      {
+        "id": "SPR-4700-UT-ZL",
+        "destination": "Zwolle",
+        "fromStopCode": "UT",
+        "toStopCode": "ZL",
+        "stops": [
+          {
+            "sequence": 1,
+            "stopCode": "UT",
+            "name": "Utrecht Centraal",
+            "arrivalPointId": null,
+            "departurePointId": "ut-platform-4",
+            "arrivalPlatform": null,
+            "departurePlatform": "4",
+            "arrivalTime": null,
+            "departureTime": "10:02",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 2,
+            "stopCode": "AMF",
+            "name": "Amersfoort Centraal",
+            "arrivalPointId": "amf-platform-3",
+            "departurePointId": "amf-platform-3",
+            "arrivalPlatform": "3",
+            "departurePlatform": "3",
+            "arrivalTime": "10:17",
+            "departureTime": "10:19",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 3,
+            "stopCode": "NKK",
+            "name": "Nijkerk",
+            "arrivalPointId": "nkk-platform-2",
+            "departurePointId": "nkk-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "10:27",
+            "departureTime": "10:28",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 4,
+            "stopCode": "PT",
+            "name": "Putten",
+            "arrivalPointId": "pt-platform-1",
+            "departurePointId": "pt-platform-1",
+            "arrivalPlatform": "1",
+            "departurePlatform": "1",
+            "arrivalTime": "10:34",
+            "departureTime": "10:35",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 5,
+            "stopCode": "EML",
+            "name": "Ermelo",
+            "arrivalPointId": "eml-platform-2",
+            "departurePointId": "eml-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "10:40",
+            "departureTime": "10:41",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 6,
+            "stopCode": "HD",
+            "name": "Harderwijk",
+            "arrivalPointId": "hd-platform-3",
+            "departurePointId": "hd-platform-3",
+            "arrivalPlatform": "3",
+            "departurePlatform": "3",
+            "arrivalTime": "10:47",
+            "departureTime": "10:49",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 7,
+            "stopCode": "NS",
+            "name": "Nunspeet",
+            "arrivalPointId": "ns-platform-2",
+            "departurePointId": "ns-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "10:57",
+            "departureTime": "10:58",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 8,
+            "stopCode": "HDE",
+            "name": "'t Harde",
+            "arrivalPointId": "hde-platform-1",
+            "departurePointId": "hde-platform-1",
+            "arrivalPlatform": "1",
+            "departurePlatform": "1",
+            "arrivalTime": "11:04",
+            "departureTime": "11:05",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 9,
+            "stopCode": "WZ",
+            "name": "Wezep",
+            "arrivalPointId": "wz-platform-2",
+            "departurePointId": "wz-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "11:10",
+            "departureTime": "11:11",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 10,
+            "stopCode": "ZL",
+            "name": "Zwolle",
+            "arrivalPointId": "zl-platform-6",
+            "departurePointId": null,
+            "arrivalPlatform": "6",
+            "departurePlatform": null,
+            "arrivalTime": "11:20",
+            "departureTime": null,
+            "stepFreeAccessible": true
+          }
+        ]
+      },
+      {
+        "id": "SPR-4700-ZL-UT",
+        "destination": "Utrecht Centraal",
+        "fromStopCode": "ZL",
+        "toStopCode": "UT",
+        "stops": [
+          {
+            "sequence": 1,
+            "stopCode": "ZL",
+            "name": "Zwolle",
+            "arrivalPointId": null,
+            "departurePointId": "zl-platform-7",
+            "arrivalPlatform": null,
+            "departurePlatform": "7",
+            "arrivalTime": null,
+            "departureTime": "10:02",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 2,
+            "stopCode": "WZ",
+            "name": "Wezep",
+            "arrivalPointId": "wz-platform-1",
+            "departurePointId": "wz-platform-1",
+            "arrivalPlatform": "1",
+            "departurePlatform": "1",
+            "arrivalTime": "10:11",
+            "departureTime": "10:12",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 3,
+            "stopCode": "HDE",
+            "name": "'t Harde",
+            "arrivalPointId": "hde-platform-2",
+            "departurePointId": "hde-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "10:17",
+            "departureTime": "10:18",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 4,
+            "stopCode": "NS",
+            "name": "Nunspeet",
+            "arrivalPointId": "ns-platform-1",
+            "departurePointId": "ns-platform-1",
+            "arrivalPlatform": "1",
+            "departurePlatform": "1",
+            "arrivalTime": "10:24",
+            "departureTime": "10:25",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 5,
+            "stopCode": "HD",
+            "name": "Harderwijk",
+            "arrivalPointId": "hd-platform-2",
+            "departurePointId": "hd-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "10:33",
+            "departureTime": "10:35",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 6,
+            "stopCode": "EML",
+            "name": "Ermelo",
+            "arrivalPointId": "eml-platform-1",
+            "departurePointId": "eml-platform-1",
+            "arrivalPlatform": "1",
+            "departurePlatform": "1",
+            "arrivalTime": "10:41",
+            "departureTime": "10:42",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 7,
+            "stopCode": "PT",
+            "name": "Putten",
+            "arrivalPointId": "pt-platform-2",
+            "departurePointId": "pt-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "10:47",
+            "departureTime": "10:48",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 8,
+            "stopCode": "NKK",
+            "name": "Nijkerk",
+            "arrivalPointId": "nkk-platform-1",
+            "departurePointId": "nkk-platform-1",
+            "arrivalPlatform": "1",
+            "departurePlatform": "1",
+            "arrivalTime": "10:54",
+            "departureTime": "10:55",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 9,
+            "stopCode": "AMF",
+            "name": "Amersfoort Centraal",
+            "arrivalPointId": "amf-platform-2",
+            "departurePointId": "amf-platform-2",
+            "arrivalPlatform": "2",
+            "departurePlatform": "2",
+            "arrivalTime": "11:03",
+            "departureTime": "11:05",
+            "stepFreeAccessible": true
+          },
+          {
+            "sequence": 10,
+            "stopCode": "UT",
+            "name": "Utrecht Centraal",
+            "arrivalPointId": "ut-platform-5",
+            "departurePointId": null,
+            "arrivalPlatform": "5",
+            "departurePlatform": null,
+            "arrivalTime": "11:20",
+            "departureTime": null,
+            "stepFreeAccessible": true
+          }
+        ]
+      }
+    ]
+  }
+}
