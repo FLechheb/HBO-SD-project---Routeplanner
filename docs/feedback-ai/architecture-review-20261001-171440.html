@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Frontend architecture review | 2627-AD-SD-F2A-06</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "strict" });
+  </script>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #172033; background: #fafaf9; }
+    body { margin: 0; }
+    main { max-width: 1100px; margin: auto; padding: 48px 24px; }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { font-size: 38px; margin: 12px 0; }
+    h2 { font-size: 26px; margin: 0 0 16px; }
+    h3 { font-size: 18px; margin: 0 0 14px; }
+    p { line-height: 1.6; }
+    a { color: #065f46; text-decoration: underline; }
+    article, .panel { border: 1px solid #d6d3d1; border-radius: 16px; background: white; padding: 28px; margin: 28px 0; }
+    .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: #57534e; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 650; margin: 0 6px 12px 0; background: #f1f5f9; }
+    .strong { background: #d1fae5; color: #065f46; }
+    .explore { background: #fef3c7; color: #92400e; }
+    .files { font: 12px/1.8 ui-monospace, monospace; overflow-wrap: anywhere; color: #475569; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 22px 0; }
+    .diagram { padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; min-height: 290px; }
+    .diagram h3 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #64748b; }
+    .box { padding: 13px; border: 1px solid #94a3b8; border-radius: 7px; background: white; text-align: center; margin: 9px 0; }
+    .deep { background: #172033; color: white; border: 4px solid #172033; border-radius: 10px; padding: 18px; text-align: center; }
+    .deep small { display: block; color: #cbd5e1; margin-top: 12px; line-height: 1.7; }
+    .seam { border-top: 2px dashed #059669; margin: 16px 0; padding-top: 9px; font-size: 12px; color: #047857; text-align: center; }
+    .arrow { text-align: center; color: #64748b; font-size: 22px; }
+    .leak { border-color: #dc2626; color: #991b1b; }
+    .note { background: #fffbeb; border-left: 3px solid #d97706; padding: 12px 16px; font-size: 14px; }
+    .wins { display: flex; flex-wrap: wrap; gap: 10px 24px; padding-left: 20px; font-size: 14px; }
+    .mermaid { overflow: auto; font-size: 12px; white-space: pre-wrap; }
+    details { margin-top: 18px; font-size: 14px; }
+    summary { cursor: pointer; font-weight: 650; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; vertical-align: top; border-bottom: 1px solid #e7e5e4; padding: 12px 8px; }
+    footer { color: #57534e; font-size: 13px; margin-top: 32px; }
+    @media (max-width: 760px) { .pair { grid-template-columns: 1fr; } main { padding: 24px 14px; } article { padding: 18px; } h1 { font-size: 30px; } }
+    @media print { article { break-inside: avoid; } body { background: white; } }
+  </style>
+</head>
+<body class="bg-stone-50 text-slate-900">
+<main class="max-w-6xl mx-auto">
+  <header>
+    <div class="eyebrow">2627-AD-SD-F2A-06 / current frontend / 01 October 2026</div>
+    <h1 class="font-serif">Fewer places to understand a journey.</h1>
+    <p>Solid box: module &nbsp; / &nbsp; dashed line: seam &nbsp; / &nbsp; red: scattered decisions &nbsp; / &nbsp; dark box: proposed deep module.</p>
+    <nav aria-label="Candidates">
+      <a href="#journey">1. Journey interpretation</a> &nbsp;
+      <a href="#profile">2. Profile policy</a> &nbsp;
+      <a href="#experiments">3. Unreachable experiments</a> &nbsp;
+      <a href="#transport">4. Remote-call seam</a>
+    </nav>
+  </header>
+
+  <section class="panel" aria-labelledby="current-title">
+    <h2 id="current-title">What actually runs</h2>
+    <pre class="mermaid">
+flowchart LR
+  M["main.tsx"] --> A["App: page and saved state"]
+  A --> F["Routeform: input"]
+  A --> P["ProfilePage: draft"]
+  A --> R["RouteResult: decisions and display"]
+  D["dummydata.json"] --> A
+  P --> A
+  A --> S["profileStorage"]
+  S --> L["localStorage"]
+  R --> T["time.ts"]
+    </pre>
+    <p><strong>Submission switches pages; it does not request a route.</strong> Station choices and results use static data. The selected date/time are logged, not used to calculate a timetable.</p>
+    <p class="note">No spec establishes whether that is intentional. The proposals below preserve current behavior; adding remote planning is a separate decision.</p>
+  </section>
+
+  <section id="candidates" aria-label="Prioritized candidates">
+    <article id="journey">
+      <span class="badge strong">Strong</span><span class="badge">in-process</span>
+      <h2>1. Concentrate journey interpretation</h2>
+      <div class="files">src/App.tsx:20-57,78-110<br>src/components/RouteResult.tsx:19-81<br>src/utils/time.ts &middot; src/types/route.ts</div>
+      <div class="pair">
+        <div class="diagram">
+          <h3>Before / one journey, scattered knowledge</h3>
+          <div class="box">App: fields + static route + page switch</div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box leak">RouteResult: stop lookup + ordering<br>facility classification + rendering</div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box">time.ts: duration arithmetic</div>
+        </div>
+        <div class="diagram">
+          <h3>After / decisions stay together</h3>
+          <div class="box">Planner coordination + request snapshot</div>
+          <div class="seam">Journey interpretation seam</div>
+          <div class="deep">Deep journey module
+            <small>Stop lookup / order / facilities / duration<br>Time helper can remain internal</small>
+          </div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box">Result display</div>
+        </div>
+      </div>
+      <p><strong>Problem:</strong> interpreting a journey requires reading orchestration, result rendering, route types, and time arithmetic; route decisions are exercised through rendering.</p>
+      <p><strong>Solution:</strong> concentrate existing route interpretation behind one small interface while keeping page coordination in App and display in the result module.</p>
+      <ul class="wins"><li>Locality: journey rules change together</li><li>Leverage: tests exercise complete outcomes</li><li>Depth: display learns fewer rules</li></ul>
+      <details open>
+        <summary>Evidence, deletion test, and verification target</summary>
+        <p>App submission calls <code>setCurrentPage("results")</code> and logs inputs; RouteResult then looks up stops and classifies facilities. Avoid merely moving that rendering into another shallow module.</p>
+        <p><strong>Deletion test:</strong> a journey module earns its keep only if deleting it puts route rules back into callers; the existing time helper need not be deleted or made independently configurable.</p>
+        <p><strong>Test surface:</strong> exercise missing stops, station order, facility classification, and transfer-time arithmetic through the journey interface; retain a rendered submit-to-result check. Preserve current outcomes until requirements say otherwise.</p>
+      </details>
+    </article>
+
+    <article id="profile">
+      <span class="badge strong">Strong</span><span class="badge">local-substitutable</span>
+      <h2>2. Deepen profile policy; keep the draft local</h2>
+      <div class="files">src/components/ProfilePage.tsx:8-42<br>src/utils/profileStorage.ts:1-57<br>src/App.tsx:26-43</div>
+      <div class="pair">
+        <div class="diagram">
+          <h3>Before / two definitions of validity</h3>
+          <div class="box">ProfilePage: finite choices + draft</div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box">App: save + commit + navigate</div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box leak">profileStorage: strings and numbers<br>Unknown choices still pass shape checks</div>
+        </div>
+        <div class="diagram">
+          <h3>After / one profile policy</h3>
+          <div class="box">Profile editor retains its draft</div>
+          <div class="seam">Profile seam</div>
+          <div class="deep">Deep profile module
+            <small>Allowed choices / stored-data validation<br>Explicit committed-profile policy</small>
+          </div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box">Browser storage adapter</div>
+        </div>
+      </div>
+      <p><strong>Problem:</strong> finite choices live in the editor while persistence accepts any string facilities and numeric transfer time, so a restored profile can disagree with its controls.</p>
+      <p><strong>Solution:</strong> put profile choices and stored-data validation together; retain local draft ownership and make persistence outcomes explicit before deciding navigation.</p>
+      <ul class="wins"><li>Locality: one profile validity policy</li><li>Leverage: editor and storage agree</li><li>Depth: callers avoid storage details</li></ul>
+      <details open>
+        <summary>Evidence, deletion test, and verification target</summary>
+        <p>The editor defines transfer choices including <code>[0, 5, 10, 15]</code>; storage validates primitive shapes rather than membership. App reconstructs the same profile from separate arguments.</p>
+        <p><strong>Deletion test:</strong> removing the profile policy would spread validity decisions back across editor and persistence. Do not add a separate pass-through module for each operation.</p>
+        <p><strong>Test surface:</strong> load malformed and unsupported stored values, round-trip a valid profile, edit without committing, cancel, and handle storage write failure. Browser storage and an in-memory test adapter justify a seam only when both are actually used.</p>
+      </details>
+    </article>
+
+    <article id="experiments">
+      <span class="badge strong">Strong</span><span class="badge">in-process</span>
+      <h2>3. Separate experiments from the active graph</h2>
+      <div class="files">src/components/RouteformTest.tsx:1-177<br>src/testroute/routepage.tsx:1-66 &middot; src/testroute/routeservice.ts:3-21<br>src/hooks/stubApi.ts:1-65 &middot; src/utils/apiUtils.ts<br>src/services/stopService.ts:4-13</div>
+      <div class="pair">
+        <div class="diagram">
+          <h3>Before / competing entry points</h3>
+          <pre class="mermaid">
+flowchart TD
+  A["main / App"] --> R["Routeform"]
+  X["RouteformTest: no entry"] --> H["stub hook"]
+  H --> U["safe-call helper"]
+  Y["routepage: no entry"] --> T["coordinate request"]
+  S["stop retrieval: no entry"]
+  classDef unused fill:#fff1f2,stroke:#dc2626;
+  class X,H,U,Y,T,S unused;
+          </pre>
+        </div>
+        <div class="diagram">
+          <h3>After / one obvious active path</h3>
+          <div class="box">main / App</div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="deep">Active planner modules
+            <small>One route form / profile / journey result</small>
+          </div>
+          <div class="seam">No new runtime seam</div>
+          <div class="box">Only intentional experiments retained<br>Purpose and entry point made explicit</div>
+        </div>
+      </div>
+      <p><strong>Problem:</strong> unreachable modules expose alternative forms and transport conventions; <code>RouteformTest.tsx</code> is a duplicate form, not an automated test.</p>
+      <p><strong>Solution:</strong> decide which experiments still answer a live question, then remove obsolete modules and exclusive dependencies or clearly isolate the retained experiments.</p>
+      <ul class="wins"><li>Locality: one active form implementation</li><li>Leverage: fewer false navigation paths</li><li>No hypothetical seam introduced</li></ul>
+      <details open>
+        <summary>Evidence, deletion test, and verification target</summary>
+        <p>No active source entry imports RouteformTest, the coordinate route page, or stop retrieval. The stub hook is used only by the unreachable duplicate form; its safe-call helper is only used by that hook.</p>
+        <p><strong>Deletion test:</strong> removing these disconnected graphs removes complexity rather than moving it. This is cleanup, not an excuse to invent a deep module.</p>
+        <p><strong>Test surface:</strong> confirm source entry points and any external tooling before deletion, then exercise the active form and profile flow. Source unreachability does not prove that assignment tooling or manually used experiments are disposable.</p>
+      </details>
+    </article>
+
+    <article id="transport">
+      <span class="badge explore">Worth exploring</span><span class="badge">local-substitutable</span>
+      <h2>4. Settle the remote contract before a shared seam</h2>
+      <div class="files">src/App.tsx:3-15,45-57<br>src/services/stopService.ts:4-13<br>src/testroute/routeservice.ts:3-21<br>src/hooks/stubApi.ts:9-65 &middot; src/types/route.ts</div>
+      <div class="pair">
+        <div class="diagram">
+          <h3>Before / different contracts, not substitutes</h3>
+          <div class="box">Active planner: static station route</div>
+          <div class="box leak">Stop retrieval: configured fetch</div>
+          <div class="box leak">Coordinate request: hard-coded host</div>
+          <div class="box leak">Stub retrieval: configured Axios</div>
+        </div>
+        <div class="diagram">
+          <h3>After / only if remote work proceeds</h3>
+          <div class="box">Planner coordinator</div>
+          <div class="seam">Chosen route contract seam</div>
+          <div class="deep">Route transport module
+            <small>Configuration / request encoding<br>Response decoding / errors</small>
+          </div>
+          <div class="arrow" aria-hidden="true">&#8595;</div>
+          <div class="box">One real remote adapter<br>Test adapter only when needed</div>
+        </div>
+      </div>
+      <p><strong>Problem:</strong> the unused paths disagree about endpoint configuration, transport, and data shape; sharing them now would hide unresolved differences rather than create depth.</p>
+      <p><strong>Solution:</strong> first choose the intended route contract, then concentrate its transport details in one module; keep remote shapes inside its adapter and the active route model near journey interpretation.</p>
+      <ul class="wins"><li>Locality: transport knowledge stays contained</li><li>Leverage: one consistent failure policy</li><li>Depth: callers avoid raw formats</li></ul>
+      <p class="note">Conditional recommendation, not an instruction to add remote planning. Coordinate and station requests are not interchangeable adapters. Do not introduce a general transport framework.</p>
+      <details>
+        <summary>Deletion test and verification target</summary>
+        <p><strong>Deletion test:</strong> today the inactive transport graph can disappear without changing the rendered flow. Once a route adapter is used, its value is keeping encoding, decoding, configuration, and failures out of callers.</p>
+        <p><strong>Test surface:</strong> request mapping, configured endpoint, malformed responses, non-success responses, and planner behavior with a test adapter. Define expected outcomes before implementing this work.</p>
+      </details>
+    </article>
+  </section>
+
+  <section class="panel" aria-labelledby="keep-title">
+    <h2 id="keep-title">Keep what is already local</h2>
+    <table>
+      <thead><tr><th scope="col">Keep</th><th scope="col">Why</th></tr></thead>
+      <tbody>
+        <tr><td>ProfilePage draft state</td><td>Editing and committing are correctly distinct. Do not move the draft into global state.</td></tr>
+        <tr><td>Small page-selection state</td><td>Three conditional pages do not alone justify a routing framework.</td></tr>
+        <tr><td>Local planner ownership</td><td>No demonstrated need for a global store or a generic state abstraction.</td></tr>
+        <tr><td>Useful internal helpers</td><td>Small files are not inherently shallow. Keep helpers that concentrate real decisions.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel" aria-labelledby="limits-title">
+    <h2 id="limits-title">Confidence and limits</h2>
+    <p>Source review of the current frontend, not only changed lines. No application files changed. No root glossary, applicable ADRs, or local spec were found.</p>
+    <p>No automated frontend tests or test script were found. Suggested checks are future behavior tests, not existing coverage. Runtime, browser layout, and backend behavior were not validated.</p>
+    <p>Unresolved product decisions: static versus remote planning, date/time semantics, reverse station order, and whether facility matching should include intermediate stops. Do not silently settle these in a cleanup.</p>
+  </section>
+
+  <section id="top-recommendation" class="panel" style="border: 2px solid #059669">
+    <div class="eyebrow">Top recommendation</div>
+    <h2>Start with journey interpretation.</h2>
+    <p><a href="#journey">Candidate 1</a> improves the active flow now: one module owns existing journey decisions, tests cross the same interface as callers, and no remote-contract decision is required.</p>
+  </section>
+  <footer>Paths are relative to frontend/. Diagrams describe conceptual ownership, not proposed method signatures. Styling and graph rendering use CDN resources; the text and hand-built diagrams remain readable without them.</footer>
+</main>
+</body>
+</html>
