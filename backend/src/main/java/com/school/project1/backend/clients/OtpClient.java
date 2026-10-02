@@ -34,7 +34,7 @@ public class OtpClient {
         System.out.println("OTP request body: " + jsonBody);
 
         return restClient.post()
-                .uri("http://localhost:8080/otp/gtfs/v1")
+                .uri("http://localhost:8085/otp/gtfs/v1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(jsonBody)
                 .retrieve()
