@@ -5,6 +5,7 @@ import type { DummyRoute } from "./types/route.ts";
 import RouteResult from "./components/RouteResult.tsx";
 import RouteForm from "./components/Routeform";
 import ProfilePage from "./components/ProfilePage";
+import type { Station } from "./services/stationService";
 import {
   loadProfile,
   saveProfile,
@@ -12,14 +13,13 @@ import {
 } from "./utils/profileStorage";
 
 const route: DummyRoute = dummyRoute;
-const stations = route.stops.map((stop) => stop.stopName);
 
 type TimeMode = "now" | "departure" | "arrival";
 type Page = "planner" | "profile" | "results";
 
 function App() {
-  const [departure, setDeparture] = useState("");
-  const [destination, setDestination] = useState("");
+  const [departure, setDeparture] = useState<Station | null>(null);
+  const [destination, setDestination] = useState<Station | null>(null);
   const [timeMode, setTimeMode] = useState<TimeMode>("now");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -76,7 +76,6 @@ function App() {
           </p>
 
           <RouteForm
-            stations={stations}
             departure={departure}
             destination={destination}
             timeMode={timeMode}
@@ -103,8 +102,8 @@ function App() {
 
           <RouteResult
             route={route}
-            departure={departure}
-            destination={destination}
+            departure={departure?.name ?? ""}
+            destination={destination?.name ?? ""}
             selectedFacilities={profile.selectedFacilities}
             transferTime={profile.transferTime}
           />

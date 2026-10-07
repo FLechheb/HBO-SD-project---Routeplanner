@@ -1,0 +1,85 @@
+
+@startuml
+top to bottom direction
+
+hide methods
+hide stereotypes
+hide fields
+skinparam layoutEngine elk
+skinparam classAttributeIconSize 0
+
+
+    entity  user {
+        * id : int <<PK>>
+        --
+        name : string
+    }
+
+    entity  address {
+        * id : int <<PK>>
+        --
+        id_user : int <<FK>>
+        id_city : int <<FK>>
+
+        street : string
+        house_number : string
+        zip_code : string
+    }
+
+    entity  user_need {
+        * id_user : int <<PK, FK>>
+        * id_special_need : int <<PK, FK>>
+    }
+
+
+    entity city {
+        * code : string <<PK>>
+        --
+        name : string
+    }
+
+    entity station {
+        * id : int <<PK>>
+        --
+    }
+
+    entity stops {
+    }
+
+    entity facility {
+        id : int <<PK>>
+        --
+        id_type
+        wheelchair_accessible
+    }
+
+    entity facility_type {
+
+    }
+
+    entity special_needs {
+        * id : int <<PK>>
+        --
+        name : string
+        type: enum
+        foot_accessible : boolean
+        has_seating : boolean
+        wheelchair_accessible : boolean
+        has_stairs : boolean
+        blind_accessible : boolean
+    }
+
+city ||..o{ address
+city ||..o{ station
+user }|--o| address
+user ||--o{ user_need
+special_needs }|..o| user_need
+special_needs }|..|| needs_facility
+facility_type }o..|| needs_facility
+facility ||--|| facility_type
+stops }|--o{ facility
+stops }|--o| station
+
+@enduml
+
+ 

@@ -1,13 +1,15 @@
+import StationPicker from "./StationPicker";
+import type { Station } from "../services/stationService";
+
 interface RouteFormProps {
-  stations: string[];
-  departure: string;
-  destination: string;
+  departure: Station | null;
+  destination: Station | null;
   timeMode: "now" | "departure" | "arrival";
   date: string;
   time: string;
 
-  setDeparture: (value: string) => void;
-  setDestination: (value: string) => void;
+  setDeparture: (station: Station | null) => void;
+  setDestination: (station: Station | null) => void;
   setTimeMode: (value: "now" | "departure" | "arrival") => void;
   setDate: (value: string) => void;
   setTime: (value: string) => void;
@@ -18,7 +20,6 @@ interface RouteFormProps {
 
 
 function RouteForm({
-  stations,
   departure,
   destination,
   timeMode,
@@ -34,39 +35,19 @@ function RouteForm({
 }: RouteFormProps) {
   return (
     <form onSubmit={onSubmit}>
-      <div>
-        <label htmlFor="departure">Vertrekstation</label>
-       <select
-         id="departure"
-         value={departure}
-         onChange={(event) => setDeparture(event.target.value)}
-       >
-         <option value="">Kies een vertrekstation</option>
+      <StationPicker
+        id="departure"
+        label="Vertrekstation"
+        selected={departure}
+        onSelect={setDeparture}
+      />
 
-         {stations.map((station) => (
-           <option key={station} value={station}>
-             {station}
-           </option>
-         ))}
-       </select>
-      </div>
-
-      <div>
-        <label htmlFor="destination">Bestemming</label>
-        <select
-          id="destination"
-          value={destination}
-          onChange={(event) => setDestination(event.target.value)}
-        >
-          <option value="">Kies een bestemmingsstation</option>
-
-          {stations.map((station) => (
-            <option key={station} value={station}>
-              {station}
-            </option>
-          ))}
-        </select>
-      </div>
+      <StationPicker
+        id="destination"
+        label="Bestemming"
+        selected={destination}
+        onSelect={setDestination}
+      />
 
       <fieldset>
         <legend>Wanneer wil je reizen?</legend>
