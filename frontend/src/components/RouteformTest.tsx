@@ -1,5 +1,3 @@
-import {useFetchStub} from "../hooks/stubApi.ts";
-
 interface RouteFormTestProps {
   stations: string[];
   departure: string;
@@ -42,7 +40,6 @@ function RouteFormTest({
   toggleFacility,
   onSubmit,
 }: RouteFormTestProps) {
-    const {result, loaded, failed, error, reload} = useFetchStub();
 
   return (
       <>
