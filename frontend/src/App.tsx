@@ -24,7 +24,7 @@ function App() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [profile, setProfile] =
-    useState<TravelProfile>(loadProfile);
+    useState<TravelProfile>(loadProfile); // Hier wordt loadProfile aangeroepen 
   const [currentPage, setCurrentPage] =
     useState<Page>("planner");
 
@@ -38,7 +38,7 @@ function App() {
     };
 
     setProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    saveProfile(updatedProfile); // Hier wordt profile gesaved 
     setCurrentPage("planner");
   };
 

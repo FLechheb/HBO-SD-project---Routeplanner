@@ -1,43 +1,117 @@
 package com.school.project1.backend.clients;
 
-import java.net.http.HttpClient;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
+import com.school.project1.backend.model.RoutePlanRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
-import com.school.project1.backend.model.RoutePlanRequest;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 
-@Service
+import java.net.http.HttpClient;
+import java.time.Duration;
+import java.util.Map;
+
+@Component
 public class OtpClient {
-    private final RestClient restClient = RestClient.builder()
-            .requestFactory(new JdkClientHttpRequestFactory(
-                    HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()))
-            .build();
 
-    public String planRoute(RoutePlanRequest request) {
-        String query = String.format("""
-                query TestPlan {
-                  planConnection(
-                    origin: { location: { coordinate: { latitude: %s, longitude: %s } } }
-                    destination: { location: { coordinate: { latitude: %s, longitude: %s } } }
-                  ) {
-                    edges { node { start end legs { mode duration from { name } to { name } } } }
+    private static final String PLAN_QUERY = """
+        query PlanRoute($originStationId: String!, $destinationStationId: String!) {
+              planConnection(
+                origin: {
+                  location: {
+                    stopLocation: { stopLocationId: $originStationId }
                   }
                 }
-                """,
-                request.originLat(), request.originLon(),
-                request.destinationLat(), request.destinationLon());
+                destination: {
+                  location: {
+                    stopLocation: { stopLocationId: $destinationStationId }
+                  }
+                }
+                first: 1
+              ) {
+                edges {
+                  node {
+                    start
+                    end
+                    legs {
+                      mode
+                      from { name }
+                      to { name }
+                    }
+                  }
+                }
+              }
+            }
+            """;
 
-        String escapedQuery = query.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
-        String jsonBody = "{\"query\": \"" + escapedQuery + "\"}";
+        private final RestClient restClient;
 
-        System.out.println("OTP request body: " + jsonBody);
+        public OtpClient(RestClient.Builder builder) {
+          HttpClient httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .connectTimeout(Duration.ofSeconds(5))
+            .build();
 
-        return restClient.post()
-                .uri("http://localhost:8085/otp/gtfs/v1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonBody)
-                .retrieve()
-                .body(String.class);
+          JdkClientHttpRequestFactory requestFactory =
+            new JdkClientHttpRequestFactory(httpClient);
+          requestFactory.setReadTimeout(Duration.ofSeconds(60));
+
+          this.restClient = builder
+            .baseUrl("http://localhost:8085")
+            .requestFactory(requestFactory)
+            .build();
+        }
+
+        public String planRoute(RoutePlanRequest request) {
+          Map<String, Object> body = Map.of(
+            "query", PLAN_QUERY,
+            "variables", Map.of(
+              "originStationId", request.originStationId(),
+              "destinationStationId", request.destinationStationId()
+            )
+          );
+
+          return restClient.post()
+            .uri("/otp/gtfs/v1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(body)
+            .retrieve()
+            .body(String.class);
     }
 }
+
+
+
+//@Service
+//public class OtpClient {
+//    private final RestClient restClient = RestClient.builder()
+//            .requestFactory(new JdkClientHttpRequestFactory(
+//                    HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()))
+//            .build();
+//
+//    public String planRoute(RoutePlanRequest request) {
+//        String query = String.format("""
+//                query TestPlan {
+//                  planConnection(
+//                    origin: { location: { coordinate: { latitude: %s, longitude: %s } } }
+//                    destination: { location: { coordinate: { latitude: %s, longitude: %s } } }
+//                  ) {
+//                    edges { node { start end legs { mode duration from { name } to { name } } } }
+//                  }
+//                }
+//                """,
+//                request.originLat(), request.originLon(),
+//                request.destinationLat(), request.destinationLon());
+//
+//        String escapedQuery = query.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
+//        String jsonBody = "{\"query\": \"" + escapedQuery + "\"}";
+//
+//        System.out.println("OTP request body: " + jsonBody);
+//
+//        return restClient.post()
+//                .uri("http://localhost:8085/otp/gtfs/v1")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(jsonBody)
+//                .retrieve()
+//                .body(String.class);
+//    }
+//}
