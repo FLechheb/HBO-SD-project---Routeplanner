@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "./App.css";
-import dummyRoute from "./Data/dummydata.json";
-import type { DummyRoute } from "./types/route.ts";
-import RouteResult from "./components/RouteResult.tsx";
+import {
+  planJourney as requestJourney,
+  type JourneyResponse,
+} from "./services/journeyResponse";
 import RouteForm from "./components/Routeform";
 import ProfilePage from "./components/ProfilePage";
 import type { Station } from "./services/stationService";
@@ -12,12 +13,13 @@ import {
   type TravelProfile,
 } from "./utils/profileStorage";
 
-const route: DummyRoute = dummyRoute;
-
 type TimeMode = "now" | "departure" | "arrival";
 type Page = "planner" | "profile" | "results";
 
 function App() {
+  const [journey, setJourney] = useState<JourneyResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [routeError, setRouteError] = useState("");
   const [departure, setDeparture] = useState<Station | null>(null);
   const [destination, setDestination] = useState<Station | null>(null);
   const [timeMode, setTimeMode] = useState<TimeMode>("now");
@@ -42,19 +44,39 @@ function App() {
     setCurrentPage("planner");
   };
 
-  const planJourney = (event: React.FormEvent) => {
+  const planJourney = async (event: React.FormEvent) => {
     event.preventDefault();
-    setCurrentPage("results");
+    if (isLoading) return;
+    setRouteError("");
 
-    console.log({
-      departure,
-      destination,
-      timeMode,
-      date,
-      time,
-      selectedFacilities: profile.selectedFacilities,
-      transferTime: profile.transferTime,
-    });
+    if (!departure || !destination) {
+      setRouteError("Kies een vertrekstation en bestemming uit de zoekresultaten.");
+      return;
+    }
+
+    if (departure.gtfsId === destination.gtfsId) {
+      setRouteError("Kies twee verschillende stations.");
+      return;
+    }
+
+    if (timeMode !== "now") {
+      setRouteError("Reizen op een gekozen datum of tijd wordt nog niet ondersteund.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await requestJourney(
+        departure.gtfsId,
+        destination.gtfsId,
+      );
+      setJourney(result);
+      setCurrentPage("results");
+    } catch {
+      setRouteError("De route kon niet worden opgehaald. Probeer het opnieuw.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -89,7 +111,8 @@ function App() {
             onSubmit={planJourney}
             onProfileClick={() => setCurrentPage("profile")}
           />
-
+          {isLoading && <p role="status">Route wordt opgehaald…</p>}
+          {routeError && <p role="alert">{routeError}</p>}
         </>
       ) : (
         <>
@@ -100,13 +123,35 @@ function App() {
             ← Reis aanpassen
           </button>
 
-          <RouteResult
-            route={route}
-            departure={departure?.name ?? ""}
-            destination={destination?.name ?? ""}
-            selectedFacilities={profile.selectedFacilities}
-            transferTime={profile.transferTime}
-          />
+          {journey && (
+            <section>
+              <h2>Reisresultaat</h2>
+              <h3>{departure?.name} → {destination?.name}</h3>
+              <p>
+                <strong>Vertrek:</strong>{" "}
+                {new Date(journey.departureTime).toLocaleString("nl-NL", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "Europe/Amsterdam",
+                })}
+              </p>
+              <p>
+                <strong>Aankomst:</strong>{" "}
+                {new Date(journey.arrivalTime).toLocaleString("nl-NL", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "Europe/Amsterdam",
+                })}
+              </p>
+              <ol>
+                {journey.legs.map((leg, index) => (
+                  <li key={`${index}-${leg.from}-${leg.to}`}>
+                    {leg.from} → {leg.to} ({leg.mode})
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
         </>
       )}
     </main>
