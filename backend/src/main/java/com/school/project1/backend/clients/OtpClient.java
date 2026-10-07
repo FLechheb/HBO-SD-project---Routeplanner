@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import com.school.project1.backend.dto.OtpPlanResponse;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
@@ -61,7 +62,7 @@ public class OtpClient {
             .build();
         }
 
-        public String planRoute(RoutePlanRequest request) {
+        public OtpPlanResponse planRoute(RoutePlanRequest request) {
           Map<String, Object> body = Map.of(
             "query", PLAN_QUERY,
             "variables", Map.of(
@@ -75,7 +76,7 @@ public class OtpClient {
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
             .retrieve()
-            .body(String.class);
+            .body(OtpPlanResponse.class);
     }
 }
 

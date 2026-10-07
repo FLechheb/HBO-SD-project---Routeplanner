@@ -1,5 +1,7 @@
 package com.school.project1.backend.dto;
 
+import org.springframework.beans.factory.config.PlaceholderConfigurerSupport;
+
 import javax.xml.crypto.Data;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -18,5 +20,15 @@ public record OtpPlanResponse(
     OffsetDateTime start,
     OffsetDateTime end,
     List<Leg> legs
-  )
+  ) {}
+
+  public record Leg(
+    String mode,
+    Place from,
+    Place to
+  ) {}
+
+  public record Place(String name) {}
+
+  public record GraphQlError(String message) {}
 }
