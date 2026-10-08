@@ -6,7 +6,9 @@ import com.school.project1.backend.dto.OtpPlanResponse;
 import com.school.project1.backend.model.RoutePlanRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.RestClientException;
 
 @Service
 public class JourneyService {
@@ -30,7 +32,16 @@ public class JourneyService {
       );
     }
 
-    OtpPlanResponse response = otpClient.planRoute(request);
+    OtpPlanResponse response;
+    try {
+      response = otpClient.planRoute(request);
+    } catch (RestClientException exception) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_GATEWAY,
+        "De routeplanner is niet bereikbaar",
+        exception
+      );
+    }
 
     if (response == null || response.errors() != null && !response.errors().isEmpty()) {
       throw new ResponseStatusException(

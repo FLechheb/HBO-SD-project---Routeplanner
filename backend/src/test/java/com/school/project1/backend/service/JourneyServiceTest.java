@@ -6,7 +6,9 @@ import com.school.project1.backend.dto.OtpPlanResponse;
 import com.school.project1.backend.model.RoutePlanRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -147,5 +149,17 @@ class JourneyServiceTest {
     assertNull(result.legs().getFirst().arrivalPlatform());
   }
 
-  
+  @Test
+  void returnsBadGatewayWhenOtpIsUnreachable() {
+    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:2");
+    when(otpClient.planRoute(request))
+      .thenThrow(new ResourceAccessException("Connection refused"));
+
+    ResponseStatusException exception = assertThrows(
+      ResponseStatusException.class,
+      () -> journeyService.planRoute(request)
+    );
+
+    assertEquals(HttpStatus.BAD_GATEWAY, exception.getStatusCode());
+  }
 }
