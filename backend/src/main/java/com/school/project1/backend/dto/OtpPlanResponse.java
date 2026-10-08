@@ -20,12 +20,25 @@ public record OtpPlanResponse(
   ) {}
 
   public record Leg(
-    String mode,
-    Place from,
-    Place to
+  String mode,
+  String headsign,
+  LegTime start,
+  LegTime end,
+  Route route,
+  Trip trip,
+  Place from,
+  Place to
   ) {}
 
-  public record Place(String name) {}
+  public record LegTime(OffsetDateTime scheduledTime) {}
+
+  public record Route(String shortName) {}
+
+  public record Trip(String tripShortName) {}
+
+  public record Place(String name, Stop stop) {}
+
+  public record Stop(String platformCode) {}
 
   public record GraphQlError(String message) {}
 }

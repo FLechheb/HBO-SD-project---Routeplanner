@@ -8,9 +8,17 @@ public record JourneyResponse(
   OffsetDateTime arrivalTime,
   List<LegResponse> legs
 ) {
+  
   public record LegResponse(
     String mode,
+    String headsign,
+    OffsetDateTime departureTime,
+    OffsetDateTime arrivalTime,
+    String routeName,
+    String tripNumber,
     String from,
-    String to
+    String departurePlatform,
+    String to,
+    String arrivalPlatform
   ) {}
 }

@@ -6,6 +6,14 @@ interface RouteResultProps {
   destinationName: string;
 }
 
+const modeLabels: Record<string, string> = {
+  RAIL: "Trein",
+  BUS: "Bus",
+  TRAM: "Tram",
+  SUBWAY: "Metro",
+  WALK: "Lopen",
+};
+
 const formatTime = (value: string): string =>
   new Intl.DateTimeFormat("nl-NL", {
     hour: "2-digit",
@@ -46,11 +54,39 @@ const RouteResult = ({
       <ol>
         {journey.legs.map((leg, index) => (
           <li key={`${index}-${leg.from}-${leg.to}`}>
-            <strong>{leg.from} → {leg.to}</strong>
-            <span>{leg.mode}</span>
+            <div>
+              <strong>
+                {leg.routeName ?? modeLabels[leg.mode] ?? leg.mode}
+                {leg.tripNumber && ` ${leg.tripNumber}`}
+              </strong>
+
+              {leg.headsign && <p>Richting {leg.headsign}</p>}
+
+              <p>{leg.from} → {leg.to}</p>
+
+              <p>
+                Vertrek:{" "}
+                {leg.departureTime
+                  ? formatTime(leg.departureTime)
+                  : "tijd onbekend"}
+                {leg.departurePlatform &&
+                  ` · gepland spoor ${leg.departurePlatform}`}
+              </p>
+
+              <p>
+                Aankomst:{" "}
+                {leg.arrivalTime
+                  ? formatTime(leg.arrivalTime)
+                  : "tijd onbekend"}
+                {leg.arrivalPlatform &&
+                  ` · gepland spoor ${leg.arrivalPlatform}`}
+              </p>
+            </div>
+
+            <span>{modeLabels[leg.mode] ?? leg.mode}</span>
           </li>
         ))}
-      </ol>
+    </ol>
     </section>
   );
 };

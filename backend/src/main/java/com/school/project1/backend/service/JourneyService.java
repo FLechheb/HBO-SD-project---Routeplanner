@@ -65,8 +65,15 @@ public class JourneyService {
       journey.legs().stream()
         .map(leg -> new JourneyResponse.LegResponse(
           leg.mode(),
+          leg.headsign(),
+          leg.start() == null ? null : leg.start().scheduledTime(),
+          leg.end() == null ? null : leg.end().scheduledTime(),
+          leg.route() == null ? null : leg.route().shortName(),
+          leg.trip() == null ? null : leg.trip().tripShortName(),
           leg.from().name(),
-          leg.to().name()
+          leg.from().stop() == null ? null : leg.from().stop().platformCode(),
+          leg.to().name(),
+          leg.to().stop() == null ? null : leg.to().stop().platformCode()
         ))
         .toList()
     );

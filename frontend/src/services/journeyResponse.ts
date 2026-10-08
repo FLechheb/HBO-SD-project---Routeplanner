@@ -3,9 +3,16 @@ export interface JourneyResponse {
   arrivalTime: string;
   legs: {
     mode: string;
+    headsign: string | null;
+    departureTime: string | null;
+    arrivalTime: string | null;
+    routeName: string | null;
+    tripNumber: string | null;
     from: string;
+    departurePlatform: string | null;
     to: string;
-  } [];
+    arrivalPlatform: string | null;
+  }[];
 }
 
 export async function planJourney(

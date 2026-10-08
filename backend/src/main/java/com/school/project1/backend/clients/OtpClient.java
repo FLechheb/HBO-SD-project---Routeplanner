@@ -36,8 +36,13 @@ public class OtpClient {
                     end
                     legs {
                       mode
-                      from { name }
-                      to { name }
+                      headsign
+                      start { scheduledTime }
+                      end { scheduledTime }
+                      route { shortName }
+                      trip { tripShortName }
+                      from { name stop { platformCode } }
+                      to { name stop { platformCode } }
                     }
                   }
                 }
