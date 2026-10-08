@@ -1,17 +1,11 @@
 import { useState } from "react";
 import "./App.css";
-import {
-  planJourney as requestJourney,
-  type JourneyResponse,
-} from "./services/journeyResponse";
+import { planJourney as requestJourney, type JourneyResponse } from "./services/journeyResponse";
 import RouteForm from "./components/Routeform";
 import ProfilePage from "./components/ProfilePage";
 import type { Station } from "./services/stationService";
-import {
-  loadProfile,
-  saveProfile,
-  type TravelProfile,
-} from "./utils/profileStorage";
+import { loadProfile, saveProfile, type TravelProfile } from "./utils/profileStorage";
+import RouteResult from "./components/RouteResult";
 
 type TimeMode = "now" | "departure" | "arrival";
 type Page = "planner" | "profile" | "results";
@@ -124,33 +118,11 @@ function App() {
           </button>
 
           {journey && (
-            <section>
-              <h2>Reisresultaat</h2>
-              <h3>{departure?.name} → {destination?.name}</h3>
-              <p>
-                <strong>Vertrek:</strong>{" "}
-                {new Date(journey.departureTime).toLocaleString("nl-NL", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                  timeZone: "Europe/Amsterdam",
-                })}
-              </p>
-              <p>
-                <strong>Aankomst:</strong>{" "}
-                {new Date(journey.arrivalTime).toLocaleString("nl-NL", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                  timeZone: "Europe/Amsterdam",
-                })}
-              </p>
-              <ol>
-                {journey.legs.map((leg, index) => (
-                  <li key={`${index}-${leg.from}-${leg.to}`}>
-                    {leg.from} → {leg.to} ({leg.mode})
-                  </li>
-                ))}
-              </ol>
-            </section>
+            <RouteResult
+              journey={journey}
+              originName={departure?.name ?? ""}
+              destinationName={destination?.name ?? ""}
+            />
           )}
         </>
       )}
@@ -159,3 +131,4 @@ function App() {
 }
 
 export default App;
+
