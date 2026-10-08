@@ -30,6 +30,61 @@ form {
 
 /* Vertrek en bestemming */
 
+.station-picker {
+  position: relative;
+}
+
+.station-picker label {
+  color: #172033;
+}
+
+.station-picker input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 2px solid #c8d2df;
+  border-radius: 8px;
+  background: #fff;
+  color: #172033;
+  font: inherit;
+}
+
+.station-picker input:focus {
+  border-color: #0057b8;
+  outline: 3px solid #eaf3ff;
+}
+
+.station-options {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid #c8d2df;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(23 32 51 / 15%);
+}
+
+.station-options button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  background: #fff;
+  color: #172033;
+  text-align: left;
+  font: inherit;
+}
+
+.station-options button:hover,
+.station-options button[aria-selected="true"] {
+  background: #eaf3ff;
+}
+
 form > div {
   margin-bottom: 40px;
 }
