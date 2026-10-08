@@ -1,109 +1,197 @@
-import type { DummyRoute } from "../types/route.ts";
-import { calculateTravelTime } from "../utils/time.ts";
+import type { JourneyResponse } from "../services/journeyResponse";
 
 interface RouteResultProps {
-  route: DummyRoute;
-  departure: string;
-  destination: string;
-  selectedFacilities: string[];
-  transferTime: number;
+  journey: JourneyResponse;
+  originName: string;
+  destinationName: string;
 }
 
-function RouteResult({
-  route,
-  departure,
-  destination,
-  selectedFacilities,
-  transferTime,
-}: RouteResultProps) {
-  const departureStop = route.stops.find(
-    (stop) => stop.stopName === departure
-  );
+const formatTime = (value: string): string =>
+  new Intl.DateTimeFormat("nl-NL", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Amsterdam",
+  }).format(new Date(value));
 
-  const destinationStop = route.stops.find(
-    (stop) => stop.stopName === destination
-  );
-if (
-  departureStop &&
-  destinationStop &&
-  destinationStop.stopNumber <= departureStop.stopNumber
-) {
-  return (
-    <section>
-      <h2>Reisresultaat</h2>
-      <p>Voor deze stations is geen geldige reis beschikbaar.</p>
-    </section>
-  );
-}
-  if (!departureStop || !destinationStop) {
-    return (
-      <section>
-        <h2>Reisresultaat</h2>
-        <p>Voor deze stations is nog geen route beschikbaar.</p>
-      </section>
-    );
-  }
-
-  const departureTime = departureStop.departureTime;
-  const arrivalTime = destinationStop.arrivalTime;
-
-  const stationFacilities = [
-    departureStop.facility,
-    destinationStop.facility,
-  ];
-
-  const availableFacilities = selectedFacilities.filter((facility) =>
-    stationFacilities.includes(facility)
-  );
-
-  const unavailableFacilities = selectedFacilities.filter(
-    (facility) => !stationFacilities.includes(facility)
+const RouteResult = ({
+  journey,
+  originName,
+  destinationName,
+}: RouteResultProps) => {
+  const durationMinutes = Math.round(
+    (new Date(journey.arrivalTime).getTime() -
+      new Date(journey.departureTime).getTime()) /
+      60_000,
   );
 
   return (
-    <section>
-      <h2>Reisresultaat</h2>
+    <section className="route-result" aria-labelledby="route-title">
+      <h1 id="route-title">Jouw route</h1>
 
-      <h3>
-        {departure} → {destination}
-      </h3>
+      <div className="route-summary">
+        <div>
+          <strong>{formatTime(journey.departureTime)}</strong>
+          <span>{originName}</span>
+        </div>
+        <span aria-hidden="true">→</span>
+        <div>
+          <strong>{formatTime(journey.arrivalTime)}</strong>
+          <span>{destinationName}</span>
+        </div>
+      </div>
 
-      <p>
-        <strong>Vertrek:</strong> {departureTime}
-      </p>
+      <p>{durationMinutes} min reistijd</p>
 
-      <p>
-        <strong>Aankomst:</strong> {arrivalTime}
-      </p>
-
-      <p>
-        <strong>Reistijd:</strong>{" "}
-        {calculateTravelTime(departureTime, arrivalTime, transferTime)}
-      </p>
-
-      {transferTime > 0 && (
-        <p>
-          <strong>Extra overstaptijd:</strong> {transferTime} minuten
-        </p>
-      )}
-
-      <h3>Voorzieningen</h3>
-
-      {availableFacilities.length > 0 && (
-        <ul>
-          {availableFacilities.map((facility) => (
-            <li key={facility}>{facility}</li>
-          ))}
-        </ul>
-      )}
-
-      {unavailableFacilities.length > 0 && (
-        <p>
-          De volgende gekozen voorzieningen zijn niet aanwezig op de gekozen stations: {unavailableFacilities.join(", ")}.
-        </p>
-      )}
+      <h2>Reisstappen</h2>
+      <ol>
+        {journey.legs.map((leg, index) => (
+          <li key={`${index}-${leg.from}-${leg.to}`}>
+            <strong>{leg.from} → {leg.to}</strong>
+            <span>{leg.mode}</span>
+          </li>
+        ))}
+      </ol>
     </section>
   );
-}
+};
 
 export default RouteResult;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import type { DummyRoute } from "../types/route.ts";
+// import { calculateTravelTime } from "../utils/time.ts";
+
+// interface RouteResultProps {
+//   route: DummyRoute;
+//   departure: string;
+//   destination: string;
+//   selectedFacilities: string[];
+//   transferTime: number;
+// }
+
+// function RouteResult({
+//   route,
+//   departure,
+//   destination,
+//   selectedFacilities,
+//   transferTime,
+// }: RouteResultProps) {
+//   const departureStop = route.stops.find(
+//     (stop) => stop.stopName === departure
+//   );
+
+//   const destinationStop = route.stops.find(
+//     (stop) => stop.stopName === destination
+//   );
+// if (
+//   departureStop &&
+//   destinationStop &&
+//   destinationStop.stopNumber <= departureStop.stopNumber
+// ) {
+//   return (
+//     <section>
+//       <h2>Reisresultaat</h2>
+//       <p>Voor deze stations is geen geldige reis beschikbaar.</p>
+//     </section>
+//   );
+// }
+//   if (!departureStop || !destinationStop) {
+//     return (
+//       <section>
+//         <h2>Reisresultaat</h2>
+//         <p>Voor deze stations is nog geen route beschikbaar.</p>
+//       </section>
+//     );
+//   }
+
+//   const departureTime = departureStop.departureTime;
+//   const arrivalTime = destinationStop.arrivalTime;
+
+//   const stationFacilities = [
+//     departureStop.facility,
+//     destinationStop.facility,
+//   ];
+
+//   const availableFacilities = selectedFacilities.filter((facility) =>
+//     stationFacilities.includes(facility)
+//   );
+
+//   const unavailableFacilities = selectedFacilities.filter(
+//     (facility) => !stationFacilities.includes(facility)
+//   );
+
+//   return (
+//     <section>
+//       <h2>Reisresultaat</h2>
+
+//       <h3>
+//         {departure} → {destination}
+//       </h3>
+
+//       <p>
+//         <strong>Vertrek:</strong> {departureTime}
+//       </p>
+
+//       <p>
+//         <strong>Aankomst:</strong> {arrivalTime}
+//       </p>
+
+//       <p>
+//         <strong>Reistijd:</strong>{" "}
+//         {calculateTravelTime(departureTime, arrivalTime, transferTime)}
+//       </p>
+
+//       {transferTime > 0 && (
+//         <p>
+//           <strong>Extra overstaptijd:</strong> {transferTime} minuten
+//         </p>
+//       )}
+
+//       <h3>Voorzieningen</h3>
+
+//       {availableFacilities.length > 0 && (
+//         <ul>
+//           {availableFacilities.map((facility) => (
+//             <li key={facility}>{facility}</li>
+//           ))}
+//         </ul>
+//       )}
+
+//       {unavailableFacilities.length > 0 && (
+//         <p>
+//           De volgende gekozen voorzieningen zijn niet aanwezig op de gekozen stations: {unavailableFacilities.join(", ")}.
+//         </p>
+//       )}
+//     </section>
+//   );
+// }
+
+// export default RouteResult;
