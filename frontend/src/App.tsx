@@ -1,30 +1,26 @@
 import { useState } from "react";
 import "./App.css";
-import dummyRoute from "./Data/dummydata.json";
-import type { DummyRoute } from "./types/route.ts";
-import RouteResult from "./components/RouteResult.tsx";
+import { planJourney as requestJourney, type JourneyResponse } from "./services/journeyResponse";
 import RouteForm from "./components/Routeform";
 import ProfilePage from "./components/ProfilePage";
-import {
-  loadProfile,
-  saveProfile,
-  type TravelProfile,
-} from "./utils/profileStorage";
-
-const route: DummyRoute = dummyRoute;
-const stations = route.stops.map((stop) => stop.stopName);
+import type { Station } from "./services/stationService";
+import { loadProfile, saveProfile, type TravelProfile } from "./utils/profileStorage";
+import RouteResult from "./components/RouteResult";
 
 type TimeMode = "now" | "departure" | "arrival";
 type Page = "planner" | "profile" | "results";
 
 function App() {
-  const [departure, setDeparture] = useState("");
-  const [destination, setDestination] = useState("");
+  const [journey, setJourney] = useState<JourneyResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [routeError, setRouteError] = useState("");
+  const [departure, setDeparture] = useState<Station | null>(null);
+  const [destination, setDestination] = useState<Station | null>(null);
   const [timeMode, setTimeMode] = useState<TimeMode>("now");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [profile, setProfile] =
-    useState<TravelProfile>(loadProfile);
+    useState<TravelProfile>(loadProfile); // Hier wordt loadProfile aangeroepen 
   const [currentPage, setCurrentPage] =
     useState<Page>("planner");
 
@@ -38,23 +34,43 @@ function App() {
     };
 
     setProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    saveProfile(updatedProfile); // Hier wordt profile gesaved 
     setCurrentPage("planner");
   };
 
-  const planJourney = (event: React.FormEvent) => {
+  const planJourney = async (event: React.FormEvent) => {
     event.preventDefault();
-    setCurrentPage("results");
+    if (isLoading) return;
+    setRouteError("");
 
-    console.log({
-      departure,
-      destination,
-      timeMode,
-      date,
-      time,
-      selectedFacilities: profile.selectedFacilities,
-      transferTime: profile.transferTime,
-    });
+    if (!departure || !destination) {
+      setRouteError("Kies een vertrekstation en bestemming uit de zoekresultaten.");
+      return;
+    }
+
+    if (departure.gtfsId === destination.gtfsId) {
+      setRouteError("Kies twee verschillende stations.");
+      return;
+    }
+
+    if (timeMode !== "now") {
+      setRouteError("Reizen op een gekozen datum of tijd wordt nog niet ondersteund.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await requestJourney(
+        departure.gtfsId,
+        destination.gtfsId,
+      );
+      setJourney(result);
+      setCurrentPage("results");
+    } catch {
+      setRouteError("De route kon niet worden opgehaald. Probeer het opnieuw.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -76,7 +92,6 @@ function App() {
           </p>
 
           <RouteForm
-            stations={stations}
             departure={departure}
             destination={destination}
             timeMode={timeMode}
@@ -90,7 +105,8 @@ function App() {
             onSubmit={planJourney}
             onProfileClick={() => setCurrentPage("profile")}
           />
-
+          {isLoading && <p role="status">Route wordt opgehaald…</p>}
+          {routeError && <p role="alert">{routeError}</p>}
         </>
       ) : (
         <>
@@ -101,13 +117,13 @@ function App() {
             ← Reis aanpassen
           </button>
 
-          <RouteResult
-            route={route}
-            departure={departure}
-            destination={destination}
-            selectedFacilities={profile.selectedFacilities}
-            transferTime={profile.transferTime}
-          />
+          {journey && (
+            <RouteResult
+              journey={journey}
+              originName={departure?.name ?? ""}
+              destinationName={destination?.name ?? ""}
+            />
+          )}
         </>
       )}
     </main>
@@ -115,3 +131,4 @@ function App() {
 }
 
 export default App;
+

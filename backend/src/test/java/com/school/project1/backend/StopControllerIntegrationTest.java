@@ -14,14 +14,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class RouteControllerIntegrationTest {
+class StopControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void returnsStopsFromTheMockJson() throws Exception {
-        mockMvc.perform(get("/api/routes"))
+    void returnsStops() throws Exception {
+        mockMvc.perform(get("/api/stops"))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
             .andExpect(jsonPath("$.length()").value(10))

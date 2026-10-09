@@ -2,7 +2,7 @@ import type { ApiStop } from "../types/route";
 
 
 export async function fetchStops(): Promise<ApiStop[]> {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/routes`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stops`, {
         method: "GET"
     });
 

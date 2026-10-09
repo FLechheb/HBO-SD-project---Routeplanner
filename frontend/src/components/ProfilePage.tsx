@@ -22,12 +22,14 @@ function ProfilePage({
   onSave,
   onBack,
 }: ProfilePageProps) {
+  // Keep edits local until the user explicitly saves the profile.
   const [facilitiesDraft, setFacilitiesDraft] =
     useState(selectedFacilities);
   const [transferTimeDraft, setTransferTimeDraft] =
     useState(transferTime);
 
   const toggleFacility = (facilityId: string) => {
+    // Create a new array instead of mutating React state directly. 
     setFacilitiesDraft((current) =>
       current.includes(facilityId)
         ? current.filter((id) => id !== facilityId)
@@ -37,6 +39,7 @@ function ProfilePage({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // App.tsx owns the profile state and decides how it is persisted.
     onSave(facilitiesDraft, transferTimeDraft);
   };
 

@@ -11,25 +11,25 @@ const defaultProfile: TravelProfile = {
 };
 
 export function loadProfile(): TravelProfile {
-  const storedProfile = localStorage.getItem(STORAGE_KEY);
+  const storedProfile = localStorage.getItem(STORAGE_KEY); // Hier wordt local storage afgelezen 
 
   if (!storedProfile) {
     return defaultProfile;
   }
 
   try {
-    const parsedProfile: unknown = JSON.parse(storedProfile);
+    const parsedProfile: unknown = JSON.parse(storedProfile); // Leest tekst uit localStorage om naar js gegevens 
 
     if (
-      typeof parsedProfile !== "object" ||
+      typeof parsedProfile !== "object" || // checkt of parsedProfile echt een object is 
       parsedProfile === null
     ) {
       return defaultProfile;
     }
 
-    const profile = parsedProfile as Partial<TravelProfile>;
+    const profile = parsedProfile as Partial<TravelProfile>; //Behandel parsedProfile tijdelijk als een object dat mogelijk onderdelen van TravelProfile bevat.
 
-    if (
+    if ( // checkt of inhoud van het profiel gelding is 
       !Array.isArray(profile.selectedFacilities) ||
       !profile.selectedFacilities.every(
         (facility) => typeof facility === "string",
