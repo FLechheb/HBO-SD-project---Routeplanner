@@ -1,12 +1,13 @@
 package com.school.project1.backend.clients;
 
-import com.school.project1.backend.model.RoutePlanRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import com.school.project1.backend.dto.OtpPlanResponse;
 import com.school.project1.backend.dto.OtpStationsResponse;
+import com.school.project1.backend.dto.RoutePlanRequestDto;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
@@ -61,7 +62,9 @@ public class OtpClient {
 
     private final RestClient restClient;
 
-    public OtpClient(RestClient.Builder builder) {
+    private record GraphQlRequest(String query, Map<String, String> variables) {}
+
+    public OtpClient(RestClient.Builder builder, @Value("${otp.base-url}") String baseUrl) {
       HttpClient httpClient = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_1_1)
         .connectTimeout(Duration.ofSeconds(5))
@@ -72,74 +75,36 @@ public class OtpClient {
       requestFactory.setReadTimeout(Duration.ofSeconds(60));
 
       this.restClient = builder
-        .baseUrl("http://localhost:8085")
+        .baseUrl(baseUrl)
         .requestFactory(requestFactory)
         .build();
     }
 
-    public OtpPlanResponse planRoute(RoutePlanRequest request) {
-      Map<String, Object> body = Map.of(
-        "query", PLAN_QUERY,
-        "variables", Map.of(
+    public OtpPlanResponse planRoute(RoutePlanRequestDto request) {
+      return postQuery(
+        PLAN_QUERY,
+        Map.of(
           "originStationId", request.originStationId(),
           "destinationStationId", request.destinationStationId()
-        )
+        ),
+        OtpPlanResponse.class
       );
-
-      return restClient.post()
-        .uri("/otp/gtfs/v1")
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(body)
-        .retrieve()
-        .body(OtpPlanResponse.class);
     }
 
     public OtpStationsResponse searchStations(String name) {
+      return postQuery(
+        STATIONS_QUERY,
+        Map.of("name", name),
+        OtpStationsResponse.class
+      );
+    }
+
+    private <T> T postQuery(String query, Map<String, String> variables, Class<T> responseType) {
       return restClient.post()
         .uri("/otp/gtfs/v1")
         .contentType(MediaType.APPLICATION_JSON)
-        .body(Map.of(
-          "query", STATIONS_QUERY,
-          "variables", Map.of("name", name)
-        ))
+        .body(new GraphQlRequest(query, variables))
         .retrieve()
-        .body(OtpStationsResponse.class);
+        .body(responseType);
     }
 }
-
-
-
-//@Service
-//public class OtpClient {
-//    private final RestClient restClient = RestClient.builder()
-//            .requestFactory(new JdkClientHttpRequestFactory(
-//                    HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()))
-//            .build();
-//
-//    public String planRoute(RoutePlanRequest request) {
-//        String query = String.format("""
-//                query TestPlan {
-//                  planConnection(
-//                    origin: { location: { coordinate: { latitude: %s, longitude: %s } } }
-//                    destination: { location: { coordinate: { latitude: %s, longitude: %s } } }
-//                  ) {
-//                    edges { node { start end legs { mode duration from { name } to { name } } } }
-//                  }
-//                }
-//                """,
-//                request.originLat(), request.originLon(),
-//                request.destinationLat(), request.destinationLon());
-//
-//        String escapedQuery = query.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
-//        String jsonBody = "{\"query\": \"" + escapedQuery + "\"}";
-//
-//        System.out.println("OTP request body: " + jsonBody);
-//
-//        return restClient.post()
-//                .uri("http://localhost:8085/otp/gtfs/v1")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(jsonBody)
-//                .retrieve()
-//                .body(String.class);
-//    }
-//}

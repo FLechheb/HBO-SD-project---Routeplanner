@@ -2,6 +2,7 @@ package com.school.project1.backend.service;
 
 import com.school.project1.backend.clients.OtpClient;
 import com.school.project1.backend.dto.OtpStationsResponse;
+import com.school.project1.backend.dto.StationResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,7 +18,7 @@ public class StationService {
     this.otpClient = otpClient;
   }
 
-  public List<OtpStationsResponse.Station> searchStations(String name) {
+  public List<StationResponseDto> searchStations(String name) {
     if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vul een statiosnaam in");
     }
@@ -31,6 +32,8 @@ public class StationService {
       throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Stations konden niet worden opgehaald");
     }
 
-    return response.data().stations();
+    return response.data().stations().stream()
+      .map(station -> new StationResponseDto(station.gtfsId(), station.name()))
+      .toList();
   }
 }

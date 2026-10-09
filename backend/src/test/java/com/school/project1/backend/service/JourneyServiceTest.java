@@ -3,7 +3,8 @@ package com.school.project1.backend.service;
 import com.school.project1.backend.clients.OtpClient;
 import com.school.project1.backend.dto.JourneyResponse;
 import com.school.project1.backend.dto.OtpPlanResponse;
-import com.school.project1.backend.model.RoutePlanRequest;
+import com.school.project1.backend.dto.RoutePlanRequestDto;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.ResourceAccessException;
@@ -27,7 +28,7 @@ class JourneyServiceTest {
 
   @Test
   void mapsOtpJourneyToRouteResponse() {
-    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:2");
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
     OffsetDateTime departure = OffsetDateTime.parse("2026-10-08T13:04:00+02:00");
     OffsetDateTime arrival = OffsetDateTime.parse("2026-10-08T13:31:00+02:00");
 
@@ -66,7 +67,7 @@ class JourneyServiceTest {
 
   @Test
   void rejectsSameOriginAndDestination() {
-    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:1");
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:1");
 
     ResponseStatusException exception = assertThrows(
       ResponseStatusException.class,
@@ -79,7 +80,7 @@ class JourneyServiceTest {
 
   @Test
   void returnsNotFoundWhenOtpFindsNoJourney() {
-    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:2");
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
     OtpPlanResponse response = new OtpPlanResponse(
       new OtpPlanResponse.Data(
         new OtpPlanResponse.PlanConnection(List.of())
@@ -98,7 +99,7 @@ class JourneyServiceTest {
 
   @Test
   void returnsBadGatewayWhenOtpReportsAnError() {
-    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:2");
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
     OtpPlanResponse response = new OtpPlanResponse(
       null,
       List.of(new OtpPlanResponse.GraphQlError("Routeplanner niet beschikbaar"))
@@ -115,7 +116,7 @@ class JourneyServiceTest {
 
   @Test
   void keepsJourneyWhenPlatformCodesAreMissing() {
-    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:2");
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
     OffsetDateTime departure = OffsetDateTime.parse("2026-10-08T13:04:00+02:00");
     OffsetDateTime arrival = OffsetDateTime.parse("2026-10-08T13:31:00+02:00");
 
@@ -151,7 +152,7 @@ class JourneyServiceTest {
 
   @Test
   void returnsBadGatewayWhenOtpIsUnreachable() {
-    RoutePlanRequest request = new RoutePlanRequest("NL:station:1", "NL:station:2");
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
     when(otpClient.planRoute(request))
       .thenThrow(new ResourceAccessException("Connection refused"));
 
