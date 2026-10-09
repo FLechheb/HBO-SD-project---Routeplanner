@@ -5,6 +5,7 @@ import com.school.project1.backend.dto.otp.OtpStationsResponse;
 import com.school.project1.backend.dto.StationResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -23,7 +24,16 @@ public class StationService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vul een statiosnaam in");
     }
 
-    OtpStationsResponse response = otpClient.searchStations(name.trim());
+    OtpStationsResponse response;
+    try {
+      response = otpClient.searchStations(name.trim());
+    } catch (RestClientException exception) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_GATEWAY,
+        "De routeplanner is niet bereikbaar",
+        exception
+      );
+    }
 
     if (response == null
       || response.errors() != null && !response.errors().isEmpty()
