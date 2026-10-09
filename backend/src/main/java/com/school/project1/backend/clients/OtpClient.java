@@ -5,8 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import com.school.project1.backend.dto.OtpPlanResponse;
-import com.school.project1.backend.dto.OtpStationsResponse;
+import com.school.project1.backend.dto.otp.OtpPlanResponse;
+import com.school.project1.backend.dto.otp.OtpStationsResponse;
 import com.school.project1.backend.dto.RoutePlanRequestDto;
 
 import java.net.http.HttpClient;

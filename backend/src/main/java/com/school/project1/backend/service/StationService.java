@@ -1,7 +1,7 @@
 package com.school.project1.backend.service;
 
 import com.school.project1.backend.clients.OtpClient;
-import com.school.project1.backend.dto.OtpStationsResponse;
+import com.school.project1.backend.dto.otp.OtpStationsResponse;
 import com.school.project1.backend.dto.StationResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

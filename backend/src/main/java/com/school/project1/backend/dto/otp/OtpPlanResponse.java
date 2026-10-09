@@ -1,4 +1,4 @@
-package com.school.project1.backend.dto;
+package com.school.project1.backend.dto.otp;
 
 import java.time.OffsetDateTime;
 import java.util.List;

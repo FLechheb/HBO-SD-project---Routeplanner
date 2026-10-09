@@ -1,7 +1,7 @@
 package com.school.project1.backend.service;
 
 import com.school.project1.backend.clients.OtpClient;
-import com.school.project1.backend.dto.OtpStationsResponse;
+import com.school.project1.backend.dto.otp.OtpStationsResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
