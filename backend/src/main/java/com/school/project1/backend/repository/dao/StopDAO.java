@@ -1,4 +1,4 @@
-package com.school.project1.backend.dao;
+package com.school.project1.backend.repository.dao;
 
 import com.school.project1.backend.model.Stop;
 
