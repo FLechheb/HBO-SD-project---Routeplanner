@@ -10,16 +10,10 @@ public class SensoryNeed extends SpecialNeed {
 
     @Override
     public Boolean isAccessible(Facility facility) {
-        boolean accessible = true;
-
-        if( getNeed().visualAid() && !facility.hasVisualAid() ){
-            accessible = false;
-        }
-
-        if(getNeed().auditoryAid() && !facility.hasAuditoryAid() ) {
-            accessible = false;
-        }
-
-        return accessible;
+        return switch (getNeed().type()) {
+            case BLIND -> facility.isUsableWithoutVision();
+            case DEAF -> facility.isUsableWithoutHearing();
+            default -> throw new IllegalStateException("Not a sensory need: " + getNeed().type());
+        };
     }
 }

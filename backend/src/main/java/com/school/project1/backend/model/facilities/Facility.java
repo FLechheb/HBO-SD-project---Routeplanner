@@ -1,13 +1,16 @@
 package com.school.project1.backend.model.facilities;
 
-import com.school.project1.backend.model.needs.SpecialNeed;
-
 public abstract class Facility { //TODO: op zelfde manier als facility opbouwen (niet elke lift is bv hetzelfde (wel/geen stoel in de lift bv))
     boolean isLevelFloored = true;
     boolean hasSeating = false;
-    boolean hasVisualAid = false;
-    boolean hasAuditoryAid = false;
+    boolean usableWithoutVision = true;
+    boolean usableWithoutHearing = true;
     boolean isWheelchairAccessible = false;
+    boolean hasGuidingLine = false;
+
+    public boolean hasGuidingLine() {
+        return hasGuidingLine;
+    }
 
     public boolean isLevelFloored() {
         return isLevelFloored;
@@ -16,12 +19,12 @@ public abstract class Facility { //TODO: op zelfde manier als facility opbouwen 
         return hasSeating;
     }
 
-    public boolean hasVisualAid() {
-        return hasVisualAid;
+    public boolean isUsableWithoutVision() {
+        return usableWithoutVision;
     }
 
-    public boolean hasAuditoryAid() {
-        return hasAuditoryAid;
+    public boolean isUsableWithoutHearing() {
+        return usableWithoutHearing;
     }
 
     public boolean isWheelchairAccessible(){

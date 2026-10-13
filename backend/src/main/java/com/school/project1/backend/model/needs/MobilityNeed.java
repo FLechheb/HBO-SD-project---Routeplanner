@@ -16,11 +16,8 @@ public class MobilityNeed extends SpecialNeed {
             accessible = false;
         }
 
-        if(getNeed().seating() && !facility.hasSeating() ) {
-            accessible = false;
-        }
-
-        if( getNeed().type() == NeedType.WHEELCHAIR_BOUND && !facility.isWheelchairAccessible() ) {
+        if( getNeed().type() == NeedType.WHEELCHAIR_BOUND
+            && (!facility.isLevelFloored() || !facility.isWheelchairAccessible()) ) {
             accessible = false;
         }
 
