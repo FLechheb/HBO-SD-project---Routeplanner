@@ -1,6 +1,5 @@
 package com.school.project1.backend.repository.dao;
 
-import com.school.project1.backend.entity.Need;
 import com.school.project1.backend.model.needs.MobilityNeed;
 import com.school.project1.backend.model.needs.NeedType;
 import com.school.project1.backend.model.needs.SensoryNeed;
@@ -21,14 +20,10 @@ public class NeedsDao {
 
     public List<SpecialNeed> getAll() {
 
-        return repo.findAll().stream().map(n -> switch(n.type()){
+        return repo.findAll().stream().map(need -> switch (need.type()) {
 
-            case NeedType.BLIND -> new SensoryNeed(n);
-            case NeedType.DEAF -> new SensoryNeed(n);
-
-            case NeedType.WHEELCHAIR_BOUND -> new MobilityNeed(n);
-            case NeedType.PHYSICAL_IMPAIRED -> new MobilityNeed(n);
-            case NeedType.ELDERLY -> new MobilityNeed(n);
+            case NeedType.BLIND, NeedType.DEAF -> new SensoryNeed(need);
+            case NeedType.WHEELCHAIR_BOUND, NeedType.ELDERLY, NeedType.PHYSICAL_IMPAIRED -> new MobilityNeed(need);
 
         }).toList();
     }
