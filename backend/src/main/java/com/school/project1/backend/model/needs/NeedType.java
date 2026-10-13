@@ -10,6 +10,8 @@ public enum NeedType {
     PHYSICAL_IMPAIRED ("Slecht ter been");
 
     private final String description;
+
+
     NeedType(String description) {
         this.description = description;
     }

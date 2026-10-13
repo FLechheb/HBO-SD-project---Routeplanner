@@ -11,6 +11,14 @@ public abstract class SpecialNeed {
         this.need = need;
     }
 
+    public Need getNeed() {
+        return this.need;
+    }
+
+    public String getDescription(){
+        return getNeed().type().getDescription();
+    }
+
     public abstract Boolean isAccessible(Facility facility);
 
     Boolean requireExtraTime; //Pas relevant met de route berekenen
