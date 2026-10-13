@@ -20,6 +20,4 @@ public abstract class SpecialNeed {
     }
 
     public abstract Boolean isAccessible(Facility facility);
-
-    Boolean requireExtraTime; //Pas relevant met de route berekenen
 }

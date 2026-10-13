@@ -10,19 +10,16 @@ public class SensoryNeed extends SpecialNeed {
 
     @Override
     public Boolean isAccessible(Facility facility) {
-        Boolean accessible = true;
+        boolean accessible = true;
 
-        if( requireVisualAid && !facility.hasVisualAid() ){
+        if( getNeed().visualAid() && !facility.hasVisualAid() ){
             accessible = false;
         }
 
-        if( requireAuditoryAid && !facility.hasAuditoryAid() ) {
+        if(getNeed().auditoryAid() && !facility.hasAuditoryAid() ) {
             accessible = false;
         }
 
         return accessible;
     }
-
-    private Boolean requireVisualAid;
-    private Boolean requireAuditoryAid;
 }

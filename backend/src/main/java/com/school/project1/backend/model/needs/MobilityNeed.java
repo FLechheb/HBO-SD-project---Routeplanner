@@ -10,25 +10,20 @@ public class MobilityNeed extends SpecialNeed {
 
     @Override
     public Boolean isAccessible(Facility facility) {
-        Boolean accessible = true;
+        boolean accessible = true;
 
-        if( requireLevelFloor && !facility.isLevelFloored() ){
+        if(getNeed().levelFloor() && !facility.isLevelFloored() ){
             accessible = false;
         }
 
-        if( requireSeating && !facility.hasSeating() ) {
+        if(getNeed().seating() && !facility.hasSeating() ) {
             accessible = false;
         }
 
-        if( requireWheelchairAccessible && !facility.isWheelchairAccessible() ) {
+        if( getNeed().type() == NeedType.WHEELCHAIR_BOUND && !facility.isWheelchairAccessible() ) {
             accessible = false;
         }
 
         return accessible;
     }
-
-    private Boolean requireWheelchairAccessible;
-
-    private Boolean requireSeating;
-    private Boolean requireLevelFloor;
 }

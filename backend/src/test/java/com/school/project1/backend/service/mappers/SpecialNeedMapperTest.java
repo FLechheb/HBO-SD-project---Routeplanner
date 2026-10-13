@@ -41,6 +41,28 @@ class SpecialNeedMapperTest {
     }
 
     @Test
-    void description() {
+    void fromDto() {
+        SpecialNeedDto dto = new SpecialNeedDto(NeedType.BLIND, true, true, true, true, true);
+        Need need = mapper.toNeed(dto);
+
+        assertEquals(NeedType.BLIND, need.type());
+        assertTrue( need.extraTime());
+        assertTrue( need.seating());
+        assertTrue( need.levelFloor());
+        assertTrue( need.visualAid());
+        assertTrue( need.auditoryAid());
+    }
+
+    @Test
+    void toNeed() {
+        SpecialNeedDto dto = new SpecialNeedDto(NeedType.WHEELCHAIR_BOUND, false, false, false, false, false);
+        Need need = mapper.toNeed(dto);
+
+        assertEquals(NeedType.WHEELCHAIR_BOUND, need.type());
+        assertFalse( need.extraTime());
+        assertFalse( need.seating());
+        assertFalse( need.levelFloor());
+        assertFalse( need.visualAid());
+        assertFalse( need.auditoryAid());
     }
 }
