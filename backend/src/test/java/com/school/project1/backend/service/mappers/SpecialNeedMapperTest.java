@@ -6,15 +6,13 @@ import com.school.project1.backend.model.needs.MobilityNeed;
 import com.school.project1.backend.model.needs.NeedType;
 import com.school.project1.backend.model.needs.SensoryNeed;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpecialNeedMapperTest {
 
-    private final SpecialNeedMapper mapper;
-    public SpecialNeedMapperTest(SpecialNeedMapper mapper) {
-        this.mapper = mapper;
-    }
+    private final SpecialNeedMapper mapper = Mappers.getMapper(SpecialNeedMapper.class);
 
     @Test
     void toDto() {

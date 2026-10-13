@@ -100,7 +100,7 @@
 							<annotationProcessorPaths>
 								<path>
 									<groupId>org.mapstruct</groupId>
-									<artifactId>mapstruct</artifactId>
+									<artifactId>mapstruct-processor</artifactId>
 									<version>1.7.0.Beta2</version>
 								</path>
 							</annotationProcessorPaths>
