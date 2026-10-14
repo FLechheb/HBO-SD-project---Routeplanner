@@ -19,6 +19,8 @@ import static com.school.project1.backend.model.needs.NeedEvaluation.NOT_APPLICA
 import static com.school.project1.backend.model.needs.NeedEvaluation.SATISFIED;
 import static com.school.project1.backend.model.needs.NeedEvaluation.UNSATISFIED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AccessibilityServiceTest {
 
@@ -30,18 +32,13 @@ class AccessibilityServiceTest {
 
     @Test
     void evaluatesRequirementRulesAndIgnoresUnrelatedFacilityRoles() {
-        Facility seatedElevator = new Elevator() {
-            @Override
-            public boolean hasSeating() {
-                return true;
-            }
-        };
-        Facility guidedStairs = new Stairs() {
-            @Override
-            public boolean hasGuidingLine() {
-                return true;
-            }
-        };
+        // Arrange
+        Elevator seatedElevator = mock(Elevator.class);
+        when(seatedElevator.getRole()).thenReturn(FacilityRole.MOVEMENT);
+        when(seatedElevator.hasSeating()).thenReturn(true);
+        Stairs guidedStairs = mock(Stairs.class);
+        when(guidedStairs.getRole()).thenReturn(FacilityRole.MOVEMENT);
+        when(guidedStairs.hasGuidingLine()).thenReturn(true);
         Stream.of(
             new RuleCase(NeedType.WHEELCHAIR_ACCESSIBLE,
                 movement(false, true), new Stairs(), new InfoBoard()),
@@ -58,59 +55,89 @@ class AccessibilityServiceTest {
             new RuleCase(NeedType.AUDITORY_INFORMATION_REQUIRED,
                 new InfoSpeaker(), new InfoBoard(), new Stairs())
         ).forEach(rule -> {
+            // Arrange
             SpecialNeed need = SpecialNeedFactory.create(rule.type());
-            assertEquals(SATISFIED, service.evaluate(need, rule.supported()), rule.type().name());
-            assertEquals(UNSATISFIED, service.evaluate(need, rule.unsupported()), rule.type().name());
-            assertEquals(NOT_APPLICABLE, service.evaluate(need, rule.unrelated()), rule.type().name());
+
+            // Act
+            NeedEvaluation supported = service.evaluate(need, rule.supported());
+            NeedEvaluation unsupported = service.evaluate(need, rule.unsupported());
+            NeedEvaluation unrelated = service.evaluate(need, rule.unrelated());
+
+            // Assert
+            assertEquals(SATISFIED, supported, rule.type().name());
+            assertEquals(UNSATISFIED, unsupported, rule.type().name());
+            assertEquals(NOT_APPLICABLE, unrelated, rule.type().name());
         });
     }
 
     @Test
     void combinesApplicableRequirementsWithAnd() {
+        // Arrange
         List<SpecialNeed> needs = needs(
             NeedType.WHEELCHAIR_ACCESSIBLE,
             NeedType.LEVEL_ACCESS_REQUIRED,
             NeedType.ELEVATOR_REQUIRED,
             NeedType.VISUAL_INFORMATION_REQUIRED
         );
-        assertEquals(SATISFIED, service.evaluate(needs, new Elevator()));
-        assertEquals(UNSATISFIED, service.evaluate(needs, new Stairs()));
-        assertEquals(SATISFIED, service.evaluate(needs, new InfoBoard()));
-
-        assertEquals(UNSATISFIED, service.evaluate(
-            needs(NeedType.WHEELCHAIR_ACCESSIBLE, NeedType.SEATING_REQUIRED),
-            new Elevator()
-        ));
+        List<SpecialNeed> seatingNeeds = needs(
+            NeedType.WHEELCHAIR_ACCESSIBLE, NeedType.SEATING_REQUIRED
+        );
         List<SpecialNeed> informationNeeds = needs(
             NeedType.VISUAL_INFORMATION_REQUIRED, NeedType.AUDITORY_INFORMATION_REQUIRED
         );
-        assertEquals(UNSATISFIED, service.evaluate(informationNeeds, new InfoBoard()));
-        Facility multimodalInformation = new InfoBoard() {
-            @Override
-            public boolean providesAuditoryInformation() {
-                return true;
-            }
-        };
-        assertEquals(SATISFIED, service.evaluate(informationNeeds, multimodalInformation));
+        Elevator elevator = new Elevator();
+        Stairs stairs = new Stairs();
+        InfoBoard infoBoard = new InfoBoard();
+        InfoBoard multimodalInformation = mock(InfoBoard.class);
+        when(multimodalInformation.getRole()).thenReturn(FacilityRole.INFORMATION);
+        when(multimodalInformation.providesVisualInformation()).thenReturn(true);
+        when(multimodalInformation.providesAuditoryInformation()).thenReturn(true);
+
+        // Act
+        NeedEvaluation elevatorResult = service.evaluate(needs, elevator);
+        NeedEvaluation stairsResult = service.evaluate(needs, stairs);
+        NeedEvaluation infoBoardResult = service.evaluate(needs, infoBoard);
+        NeedEvaluation seatingResult = service.evaluate(seatingNeeds, elevator);
+        NeedEvaluation visualOnlyResult = service.evaluate(informationNeeds, infoBoard);
+        NeedEvaluation multimodalResult = service.evaluate(informationNeeds, multimodalInformation);
+
+        // Assert
+        assertEquals(SATISFIED, elevatorResult);
+        assertEquals(UNSATISFIED, stairsResult);
+        assertEquals(SATISFIED, infoBoardResult);
+        assertEquals(UNSATISFIED, seatingResult);
+        assertEquals(UNSATISFIED, visualOnlyResult);
+        assertEquals(SATISFIED, multimodalResult);
     }
 
     @Test
     void timingAndEmptySelectionsDoNotClaimFacilitySatisfaction() {
-        assertEquals(NOT_APPLICABLE, service.evaluate(List.of(), new Elevator()));
-        assertEquals(NOT_APPLICABLE, evaluate(NeedType.EXTRA_TRANSFER_TIME, new Elevator()));
-        assertEquals(NOT_APPLICABLE, evaluate(NeedType.EXTRA_TRANSFER_TIME, new Stairs()));
-        assertEquals(NOT_APPLICABLE, service.evaluate(
-            needs(NeedType.EXTRA_TRANSFER_TIME), new InfoBoard()
-        ));
-
+        // Arrange
+        List<SpecialNeed> empty = List.of();
+        SpecialNeed timingNeed = SpecialNeedFactory.create(NeedType.EXTRA_TRANSFER_TIME);
+        List<SpecialNeed> timingOnly = needs(NeedType.EXTRA_TRANSFER_TIME);
         List<SpecialNeed> mixed = needs(NeedType.EXTRA_TRANSFER_TIME, NeedType.WHEELCHAIR_ACCESSIBLE);
-        assertEquals(SATISFIED, service.evaluate(mixed, new Elevator()));
-        assertEquals(UNSATISFIED, service.evaluate(mixed, new Stairs()));
-        assertEquals(NOT_APPLICABLE, service.evaluate(mixed, new InfoBoard()));
-    }
+        Elevator elevator = new Elevator();
+        Stairs stairs = new Stairs();
+        InfoBoard infoBoard = new InfoBoard();
 
-    private NeedEvaluation evaluate(NeedType type, Facility facility) {
-        return service.evaluate(SpecialNeedFactory.create(type), facility);
+        // Act
+        NeedEvaluation emptyResult = service.evaluate(empty, elevator);
+        NeedEvaluation elevatorTimingResult = service.evaluate(timingNeed, elevator);
+        NeedEvaluation stairsTimingResult = service.evaluate(timingNeed, stairs);
+        NeedEvaluation timingOnlyResult = service.evaluate(timingOnly, infoBoard);
+        NeedEvaluation mixedElevatorResult = service.evaluate(mixed, elevator);
+        NeedEvaluation mixedStairsResult = service.evaluate(mixed, stairs);
+        NeedEvaluation mixedInfoBoardResult = service.evaluate(mixed, infoBoard);
+
+        // Assert
+        assertEquals(NOT_APPLICABLE, emptyResult);
+        assertEquals(NOT_APPLICABLE, elevatorTimingResult);
+        assertEquals(NOT_APPLICABLE, stairsTimingResult);
+        assertEquals(NOT_APPLICABLE, timingOnlyResult);
+        assertEquals(SATISFIED, mixedElevatorResult);
+        assertEquals(UNSATISFIED, mixedStairsResult);
+        assertEquals(NOT_APPLICABLE, mixedInfoBoardResult);
     }
 
     private List<SpecialNeed> needs(NeedType... types) {
@@ -118,21 +145,10 @@ class AccessibilityServiceTest {
     }
 
     private Facility movement(boolean stepFree, boolean wheelchairAccessible) {
-        return new Facility() {
-            @Override
-            public FacilityRole getRole() {
-                return FacilityRole.MOVEMENT;
-            }
-
-            @Override
-            public boolean isStepFree() {
-                return stepFree;
-            }
-
-            @Override
-            public boolean isWheelchairAccessible() {
-                return wheelchairAccessible;
-            }
-        };
+        Facility facility = mock(Facility.class);
+        when(facility.getRole()).thenReturn(FacilityRole.MOVEMENT);
+        when(facility.isStepFree()).thenReturn(stepFree);
+        when(facility.isWheelchairAccessible()).thenReturn(wheelchairAccessible);
+        return facility;
     }
 }

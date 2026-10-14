@@ -2,6 +2,7 @@ package com.school.project1.backend.controllers;
 
 import com.school.project1.backend.model.needs.NeedType;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,21 +42,22 @@ class SpecialNeedControllerIntegrationTest {
 
     @Test
     void getNeeds() {
-
-        List<Map<String, Object>> catalogue = RestAssured.get("/api/needs")
-            .then()
-            .statusCode(200)
-            .contentType("application/json")
-            .extract().jsonPath().getList("$");
-
+        // Arrange
         List<NeedType> types = Arrays.stream(NeedType.values())
             .sorted(Comparator.comparing(Enum::name))
             .toList();
-        assertThat(catalogue).containsExactlyElementsOf(
+        List<Map<String, Object>> expectedCatalogue =
             types.stream().map(type -> Map.<String, Object>of(
                 "type", type.name(),
                 "description", type.getDescription()
-            )).toList()
-        );
+            )).toList();
+
+        // Act
+        Response response = RestAssured.get("/api/needs");
+
+        // Assert
+        response.then().statusCode(200).contentType("application/json");
+        List<Map<String, Object>> catalogue = response.jsonPath().getList("$");
+        assertThat(catalogue).containsExactlyElementsOf(expectedCatalogue);
     }
 }

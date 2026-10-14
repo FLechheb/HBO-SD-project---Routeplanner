@@ -29,26 +29,45 @@ class NeedRepositoryIntegrationTest {
 
     @Test
     void migrationsSeedEveryRequirementWithoutDisabilityPresetColumns() {
-        assertThat(flyway.validateWithResult().validationSuccessful).isTrue();
+        // Arrange
+        NeedType[] expectedTypes = NeedType.values();
 
+        // Act
+        var validation = flyway.validateWithResult();
         var needs = repository.findAll();
-        assertThat(needs).extracting(Need::type).containsExactlyInAnyOrder(NeedType.values());
-        assertThat(jdbcTemplate.queryForList("SELECT * FROM \"special_need\""))
+        var rows = jdbcTemplate.queryForList("SELECT * FROM \"special_need\"");
+
+        // Assert
+        assertThat(validation.validationSuccessful).isTrue();
+        assertThat(needs).extracting(Need::type).containsExactlyInAnyOrder(expectedTypes);
+        assertThat(rows)
             .allSatisfy(row -> assertThat(row).containsOnlyKeys("type"));
     }
 
     @Test
     void returnsNeedsOrderedByType() {
+        // Arrange
+        var expectedOrder = Arrays.stream(NeedType.values()).map(Enum::name).sorted().toList();
+
+        // Act
         var needs = repository.getAll();
-        assertThat(needs).extracting(need -> need.type().name()).containsExactlyElementsOf(
-            Arrays.stream(NeedType.values()).map(Enum::name).sorted().toList()
-        );
-        assertThat(needs).containsExactlyInAnyOrderElementsOf(repository.findAll());
+        var allNeeds = repository.findAll();
+
+        // Assert
+        assertThat(needs).extracting(need -> need.type().name()).containsExactlyElementsOf(expectedOrder);
+        assertThat(needs).containsExactlyInAnyOrderElementsOf(allNeeds);
     }
 
     @Test
     void findsNeedByEnumIdentifier() {
-        assertThat(repository.findById(NeedType.WHEELCHAIR_ACCESSIBLE))
-            .contains(new Need(NeedType.WHEELCHAIR_ACCESSIBLE));
+        // Arrange
+        NeedType type = NeedType.WHEELCHAIR_ACCESSIBLE;
+        Need expectedNeed = new Need(type);
+
+        // Act
+        var need = repository.findById(type);
+
+        // Assert
+        assertThat(need).contains(expectedNeed);
     }
 }

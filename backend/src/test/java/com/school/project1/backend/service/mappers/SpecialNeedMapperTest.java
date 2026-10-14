@@ -2,6 +2,7 @@ package com.school.project1.backend.service.mappers;
 
 import com.school.project1.backend.dto.needs.SpecialNeedDto;
 import com.school.project1.backend.model.needs.NeedType;
+import com.school.project1.backend.model.needs.SpecialNeed;
 import com.school.project1.backend.model.needs.SpecialNeedFactory;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -15,9 +16,16 @@ class SpecialNeedMapperTest {
     @Test
     void mapsEveryPolymorphicNeedToItsCodeAndCanonicalDescription() {
         for (NeedType type : NeedType.values()) {
-            SpecialNeedDto dto = mapper.toDto(SpecialNeedFactory.create(type));
+            // Arrange
+            SpecialNeed need = SpecialNeedFactory.create(type);
+            String expectedDescription = type.getDescription();
+
+            // Act
+            SpecialNeedDto dto = mapper.toDto(need);
+
+            // Assert
             assertEquals(type, dto.type());
-            assertEquals(type.getDescription(), dto.description());
+            assertEquals(expectedDescription, dto.description());
         }
     }
 }
