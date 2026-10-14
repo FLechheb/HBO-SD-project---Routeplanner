@@ -1,12 +1,14 @@
-package com.school.project1.backend;
+package com.school.project1.backend.repository;
 
 import com.school.project1.backend.entity.Need;
 import com.school.project1.backend.model.needs.NeedType;
-import com.school.project1.backend.repository.NeedRepository;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,35 +24,31 @@ class NeedRepositoryIntegrationTest {
     @Autowired
     private Flyway flyway;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Test
-    void migrationsSeedEveryNeedTypeWithProvisionalDefaults() {
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("6");
+    void migrationsSeedEveryRequirementWithoutDisabilityPresetColumns() {
         assertThat(flyway.validateWithResult().validationSuccessful).isTrue();
 
         var needs = repository.findAll();
         assertThat(needs).extracting(Need::type).containsExactlyInAnyOrder(NeedType.values());
-        assertThat(needs).containsExactlyInAnyOrder(
-            new Need(NeedType.DEAF, false, false, false, true, false),
-            new Need(NeedType.BLIND, true, false, false, false, true),
-            new Need(NeedType.WHEELCHAIR_BOUND, true, false, true, false, false),
-            new Need(NeedType.ELDERLY, true, true, true, false, false),
-            new Need(NeedType.PHYSICAL_IMPAIRED, true, true, true, false, false)
-        );
+        assertThat(jdbcTemplate.queryForList("SELECT * FROM \"special_need\""))
+            .allSatisfy(row -> assertThat(row).containsOnlyKeys("type"));
     }
 
     @Test
     void returnsNeedsOrderedByType() {
         var needs = repository.getAll();
-        assertThat(needs).extracting(Need::type).containsExactly(
-            NeedType.BLIND, NeedType.DEAF, NeedType.ELDERLY,
-            NeedType.PHYSICAL_IMPAIRED, NeedType.WHEELCHAIR_BOUND
+        assertThat(needs).extracting(need -> need.type().name()).containsExactlyElementsOf(
+            Arrays.stream(NeedType.values()).map(Enum::name).sorted().toList()
         );
         assertThat(needs).containsExactlyInAnyOrderElementsOf(repository.findAll());
     }
 
     @Test
     void findsNeedByEnumIdentifier() {
-        assertThat(repository.findById(NeedType.BLIND))
-            .contains(new Need(NeedType.BLIND, true, false, false, false, true));
+        assertThat(repository.findById(NeedType.WHEELCHAIR_ACCESSIBLE))
+            .contains(new Need(NeedType.WHEELCHAIR_ACCESSIBLE));
     }
 }

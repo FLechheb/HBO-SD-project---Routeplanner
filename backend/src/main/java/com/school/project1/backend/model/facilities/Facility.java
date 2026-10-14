@@ -1,33 +1,30 @@
 package com.school.project1.backend.model.facilities;
 
-public abstract class Facility { //TODO: op zelfde manier als facility opbouwen (niet elke lift is bv hetzelfde (wel/geen stoel in de lift bv))
-    boolean isLevelFloored = true;
-    boolean hasSeating = false;
-    boolean usableWithoutVision = true;
-    boolean usableWithoutHearing = true;
-    boolean isWheelchairAccessible = false;
-    boolean hasGuidingLine = false;
+public abstract class Facility {
+
+    public abstract FacilityRole getRole();
 
     public boolean hasGuidingLine() {
-        return hasGuidingLine;
+        return false;
     }
 
-    public boolean isLevelFloored() {
-        return isLevelFloored;
+    public boolean isStepFree() {
+        return false;
     }
+
     public boolean hasSeating() {
-        return hasSeating;
+        return false;
     }
 
-    public boolean isUsableWithoutVision() {
-        return usableWithoutVision;
+    public boolean providesVisualInformation() {
+        return false;
     }
 
-    public boolean isUsableWithoutHearing() {
-        return usableWithoutHearing;
+    public boolean providesAuditoryInformation() {
+        return false;
     }
 
-    public boolean isWheelchairAccessible(){
-        return isWheelchairAccessible;
+    public boolean isWheelchairAccessible() {
+        return false;
     }
 }

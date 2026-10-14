@@ -1,23 +1,20 @@
 package com.school.project1.backend.model.needs;
 
-import com.school.project1.backend.entity.Need;
-import com.school.project1.backend.model.facilities.Facility;
+import java.util.Objects;
 
-public abstract class SpecialNeed {
+public abstract sealed class SpecialNeed permits FacilityNeed, TimingNeed {
 
-    private final Need need;
+    private final NeedType type;
 
-    public SpecialNeed(Need need) {
-        this.need = need;
+    protected SpecialNeed(NeedType type) {
+        this.type = Objects.requireNonNull(type, "type");
     }
 
-    public Need getNeed() {
-        return this.need;
+    public final NeedType getType() {
+        return type;
     }
 
-    public String getDescription(){
-        return getNeed().type().getDescription();
+    public final String getDescription() {
+        return type.getDescription();
     }
-
-    public abstract Boolean isAccessible(Facility facility);
 }

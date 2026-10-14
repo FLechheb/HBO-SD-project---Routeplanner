@@ -1,0 +1,18 @@
+DELETE FROM "special_need"
+WHERE "type" IN ('DEAF', 'BLIND', 'WHEELCHAIR_BOUND', 'ELDERLY', 'PHYSICAL_IMPAIRED');
+
+ALTER TABLE "special_need" DROP COLUMN "extra_time";
+ALTER TABLE "special_need" DROP COLUMN "seating";
+ALTER TABLE "special_need" DROP COLUMN "level_floor";
+ALTER TABLE "special_need" DROP COLUMN "visual_aid";
+ALTER TABLE "special_need" DROP COLUMN "auditory_aid";
+
+INSERT INTO "special_need" ("type") VALUES
+    ('AUDITORY_INFORMATION_REQUIRED'),
+    ('ELEVATOR_REQUIRED'),
+    ('EXTRA_TRANSFER_TIME'),
+    ('GUIDING_LINE_REQUIRED'),
+    ('LEVEL_ACCESS_REQUIRED'),
+    ('SEATING_REQUIRED'),
+    ('VISUAL_INFORMATION_REQUIRED'),
+    ('WHEELCHAIR_ACCESSIBLE');

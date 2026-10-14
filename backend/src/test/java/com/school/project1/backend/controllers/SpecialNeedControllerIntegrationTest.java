@@ -10,10 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
-import static java.lang.IO.println;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -41,12 +42,20 @@ class SpecialNeedControllerIntegrationTest {
     @Test
     void getNeeds() {
 
-        RestAssured.get("/api/needs")
+        List<Map<String, Object>> catalogue = RestAssured.get("/api/needs")
             .then()
             .statusCode(200)
             .contentType("application/json")
-            .body("type", containsInAnyOrder(
-                Arrays.stream(NeedType.values()).map(Enum::name).toArray(String[]::new)
-            ));
+            .extract().jsonPath().getList("$");
+
+        List<NeedType> types = Arrays.stream(NeedType.values())
+            .sorted(Comparator.comparing(Enum::name))
+            .toList();
+        assertThat(catalogue).containsExactlyElementsOf(
+            types.stream().map(type -> Map.<String, Object>of(
+                "type", type.name(),
+                "description", type.getDescription()
+            )).toList()
+        );
     }
 }

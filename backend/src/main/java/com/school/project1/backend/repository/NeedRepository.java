@@ -12,7 +12,7 @@ import java.util.List;
 public interface NeedRepository extends ListCrudRepository<Need, NeedType> {
 
     @Query("""
-        SELECT "type", "extra_time", "seating", "level_floor", "visual_aid", "auditory_aid"
+        SELECT "type"
         FROM "special_need"
         ORDER BY "type"
         """)
