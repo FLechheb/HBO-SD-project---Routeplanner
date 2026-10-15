@@ -39,8 +39,8 @@ class JourneyServiceTest {
       new OtpPlanResponse.LegTime(arrival),
       new OtpPlanResponse.Route("Intercity"),
       new OtpPlanResponse.Trip("3051"),
-      new OtpPlanResponse.Place("Amsterdam Centraal", new OtpPlanResponse.Stop("4b")),
-      new OtpPlanResponse.Place("Utrecht Centraal", new OtpPlanResponse.Stop("19"))
+      new OtpPlanResponse.Place("Amsterdam Centraal", new OtpPlanResponse.Stop("NL:stop:asd-4b", "4b")),
+      new OtpPlanResponse.Place("Utrecht Centraal", new OtpPlanResponse.Stop("NL:stop:ut-19", "19"))
     );
 
     OtpPlanResponse otpResponse = new OtpPlanResponse(

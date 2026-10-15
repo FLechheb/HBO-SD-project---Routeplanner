@@ -38,7 +38,7 @@ public record OtpPlanResponse(
 
   public record Place(String name, Stop stop) {}
 
-  public record Stop(String platformCode) {}
+  public record Stop(String gtfsId, String platformCode) {}
 
   public record GraphQlError(String message) {}
 }
