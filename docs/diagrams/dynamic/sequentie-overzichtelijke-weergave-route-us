@@ -1,0 +1,64 @@
+@startuml
+title Reis plannen via de OTP-routeplanner
+autonumber
+
+actor Reiziger
+participant "React-app\n(App en StationPicker)" as UI
+participant RouteController as Controller
+participant StationService as StationService
+participant JourneyService as JourneyService
+participant OtpClient as OtpClient
+participant "OTP GraphQL API" as OTP
+
+group Vertrekstation en bestemming kiezen
+  loop Voor beide stations
+    Reiziger -> UI: Zoek station
+    UI -> Controller: GET /api/routes/stations?name=...
+    Controller -> StationService: searchStations(name)
+    StationService -> OtpClient: searchStations(name)
+    OtpClient -> OTP: POST /otp/gtfs/v1\nSearchStations-query en variabelen
+    OTP --> OtpClient: OtpStationsResponse
+    OtpClient --> StationService: OtpStationsResponse
+    StationService --> Controller: List<StationResponseDto>
+    Controller --> UI: 200 OK + stations
+    UI --> Reiziger: Toon zoekresultaten
+  end
+end
+
+Reiziger -> UI: Klik "Plan mijn reis"
+
+alt Stations niet gekozen, gelijk of tijdmodus niet "Nu"
+  UI --> Reiziger: Toon validatiefout
+else Frontendinvoer geldig
+  UI -> Controller: POST /api/routes/plan\noriginStationId, destinationStationId
+  Controller -> JourneyService: planRoute(RoutePlanRequestDto)
+
+  alt Ongeldige station-ID's
+    JourneyService --> Controller: 400 Bad Request
+    Controller --> UI: 400 Bad Request
+  else Invoer geldig
+    JourneyService -> OtpClient: planRoute(request)
+    OtpClient -> OTP: POST /otp/gtfs/v1\nPlanRoute-query en variabelen
+
+    alt OTP-fout of OTP niet bereikbaar
+      OtpClient --> JourneyService: Foutantwoord of RestClientException
+      JourneyService --> Controller: 502 Bad Gateway
+      Controller --> UI: 502 Bad Gateway
+    else Geen reis gevonden
+      OTP --> OtpClient: OtpPlanResponse zonder routes
+      OtpClient --> JourneyService: OtpPlanResponse
+      JourneyService --> Controller: 404 Not Found
+      Controller --> UI: 404 Not Found
+    else Reis gevonden
+      OTP --> OtpClient: OtpPlanResponse met route
+      OtpClient --> JourneyService: OtpPlanResponse
+      JourneyService -> JourneyService: Map legs naar JourneyResponse
+      JourneyService --> Controller: JourneyResponse
+      Controller --> UI: 200 OK + JourneyResponse
+      UI --> Reiziger: Toon RouteResult
+    end
+  end
+end
+
+@enduml
+
