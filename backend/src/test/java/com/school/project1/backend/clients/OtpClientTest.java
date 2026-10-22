@@ -63,7 +63,7 @@ class OtpClientTest {
       """);
 
     var response = otpClient.planRoute(
-      new RoutePlanRequestDto("NL:station:1", "NL:station:2")
+      new RoutePlanRequestDto("NL:station:1", "NL:station:2", 0)
     );
 
     JsonNode body = jsonMapper.readTree(requestBody.get());
