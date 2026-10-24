@@ -18,7 +18,8 @@ export interface JourneyResponse {
 export async function planJourney(
   originStationId: string,
   destinationStationId: string,
-): Promise<JourneyResponse>  {
+  extraTransferMinutes: number,
+): Promise<JourneyResponse> {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/api/routes/plan`,
     {
@@ -27,6 +28,7 @@ export async function planJourney(
       body: JSON.stringify({
         originStationId,
         destinationStationId,
+        extraTransferMinutes,
       }),
     },
   );

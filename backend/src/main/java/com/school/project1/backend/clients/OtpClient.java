@@ -17,7 +17,11 @@ import java.util.Map;
 public class OtpClient {
 
     private static final String PLAN_QUERY = """
-        query PlanRoute($originStationId: String!, $destinationStationId: String!) {
+        query PlanRoute(
+          $originStationId: String!,
+          $destinationStationId: String!,
+          $extraTransferTime: Duration!
+        ) {
               planConnection(
                 origin: {
                   location: {
@@ -27,6 +31,13 @@ public class OtpClient {
                 destination: {
                   location: {
                     stopLocation: { stopLocationId: $destinationStationId }
+                  }
+                }
+                preferences: {
+                  transit: {
+                    transfer: {
+                      slack: $extraTransferTime
+                    }
                   }
                 }
                 first: 1
@@ -85,7 +96,9 @@ public class OtpClient {
         PLAN_QUERY,
         Map.of(
           "originStationId", request.originStationId(),
-          "destinationStationId", request.destinationStationId()
+          "destinationStationId", request.destinationStationId(),
+          "extraTransferTime",
+          Duration.ofMinutes(request.extraTransferMinutes()).toString()
         ),
         OtpPlanResponse.class
       );

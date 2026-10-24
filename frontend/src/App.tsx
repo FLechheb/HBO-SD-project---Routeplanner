@@ -63,6 +63,7 @@ function App() {
       const result = await requestJourney(
         departure.gtfsId,
         destination.gtfsId,
+        profile.transferTime,
       );
       setJourney(result);
       setCurrentPage("results");
