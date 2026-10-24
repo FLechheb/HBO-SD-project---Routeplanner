@@ -22,23 +22,23 @@ public class AccessibilityService {
         };
     }
 
-    public NeedEvaluation evaluate(Collection<? extends SpecialNeed> needs, Facility facility) {
-        Objects.requireNonNull(needs, "needs");
-        Objects.requireNonNull(facility, "facility");
-        boolean applicable = false;
-        boolean unsatisfied = false;
+public NeedEvaluation evaluate(Collection<? extends SpecialNeed> needs, Facility facility) {
+    Objects.requireNonNull(needs, "needs");
+    Objects.requireNonNull(facility, "facility");
+    boolean applicable = false;
+    boolean unsatisfied = false;
 
-        for (SpecialNeed need : needs) {
-            switch (evaluate(need, facility)) {
-                case UNSATISFIED -> unsatisfied = true;
-                case SATISFIED -> applicable = true;
-                case NOT_APPLICABLE -> { }
-            }
+    for (SpecialNeed need : needs) {
+        switch (evaluate(need, facility)) {
+            case UNSATISFIED -> unsatisfied = true;
+            case SATISFIED -> applicable = true;
+            case NOT_APPLICABLE -> { }
         }
-
-        if (unsatisfied) {
-            return NeedEvaluation.UNSATISFIED;
-        }
-        return applicable ? NeedEvaluation.SATISFIED : NeedEvaluation.NOT_APPLICABLE;
     }
+
+    if (unsatisfied) {
+        return NeedEvaluation.UNSATISFIED;
+    }
+    return applicable ? NeedEvaluation.SATISFIED : NeedEvaluation.NOT_APPLICABLE;
+}
 }
