@@ -6,7 +6,6 @@ describe("planJourney", () => {
     vi.unstubAllGlobals();
   });
 
-  // TODO: Goed begrijpen nog dit:
   it("sends extra transfer minutes when planning a journey", async () => {
     // Arrange
     const fetchMock = vi.fn().mockResolvedValue({
