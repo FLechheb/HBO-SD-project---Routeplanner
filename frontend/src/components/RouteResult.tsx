@@ -1,10 +1,13 @@
 import type { JourneyResponse } from "../services/journeyResponse";
+import StopFacilities from "./StopFacilities";
 
 interface RouteResultProps {
   journey: JourneyResponse;
   originName: string;
   destinationName: string;
 }
+
+const WALK_MODE = "WALK";
 
 const modeLabels: Record<string, string> = {
   RAIL: "Trein",
@@ -73,6 +76,10 @@ const RouteResult = ({
                   ` · gepland spoor ${leg.departurePlatform}`}
               </p>
 
+              {leg.mode !== WALK_MODE && (
+                <StopFacilities facilities={leg.departureFacilities} />
+              )}
+
               <p>
                 Aankomst:{" "}
                 {leg.arrivalTime
@@ -81,6 +88,10 @@ const RouteResult = ({
                 {leg.arrivalPlatform &&
                   ` · gepland spoor ${leg.arrivalPlatform}`}
               </p>
+
+              {leg.mode !== WALK_MODE && (
+                <StopFacilities facilities={leg.arrivalFacilities} />
+              )}
             </div>
 
             <span>{modeLabels[leg.mode] ?? leg.mode}</span>
