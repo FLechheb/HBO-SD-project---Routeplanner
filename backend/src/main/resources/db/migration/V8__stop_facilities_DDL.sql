@@ -1,4 +1,4 @@
-DROP TABLE "stop";
+DROP TABLE stop;
 
 CREATE TABLE "stop" (
     "gtfs_id" VARCHAR(64) PRIMARY KEY,
