@@ -4,8 +4,11 @@ import com.school.project1.backend.clients.OtpClient;
 import com.school.project1.backend.dto.JourneyResponse;
 import com.school.project1.backend.dto.otp.OtpPlanResponse;
 import com.school.project1.backend.dto.RoutePlanRequestDto;
+import com.school.project1.backend.model.facilities.PhysicalFacility;
+import com.school.project1.backend.repository.dao.FacilityDao;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,6 +16,8 @@ import org.springframework.web.client.ResourceAccessException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -23,8 +28,15 @@ import static org.mockito.Mockito.when;
 
 class JourneyServiceTest {
 
+  private static final OtpPlanResponse.Place UTRECHT_PLATFORM_7 =
+    new OtpPlanResponse.Place("Utrecht Centraal", new OtpPlanResponse.Stop("NL:2994013", "7"));
+
+  private static final OtpPlanResponse.Place AMSTERDAM_PLATFORM_7A =
+    new OtpPlanResponse.Place("Amsterdam Centraal", new OtpPlanResponse.Stop("NL:2992194", "7a"));
+
   private final OtpClient otpClient = mock(OtpClient.class);
-  private final JourneyService journeyService = new JourneyService(otpClient);
+  private final FacilityDao facilityDao = mock(FacilityDao.class);
+  private final JourneyService journeyService = new JourneyService(otpClient, facilityDao);
 
   @Test
   void mapsOtpJourneyToRouteResponse() {
@@ -162,5 +174,78 @@ class JourneyServiceTest {
     );
 
     assertEquals(HttpStatus.BAD_GATEWAY, exception.getStatusCode());
+  }
+
+  @Test
+  void addsFacilitiesOfDepartureAndArrivalStop() {
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
+    when(otpClient.planRoute(request)).thenReturn(journeyBetween(UTRECHT_PLATFORM_7, AMSTERDAM_PLATFORM_7A));
+    when(facilityDao.findByStopIds(Set.of("NL:2994013", "NL:2992194"))).thenReturn(Map.of(
+      "NL:2994013", List.of(new PhysicalFacility("ELEVATOR", true), new PhysicalFacility("ELEVATOR", false)),
+      "NL:2992194", List.of()
+    ));
+
+    JourneyResponse.LegResponse leg = journeyService.planRoute(request).legs().getFirst();
+
+    assertEquals(
+      List.of(
+        new JourneyResponse.FacilityResponse("ELEVATOR", true),
+        new JourneyResponse.FacilityResponse("ELEVATOR", false)
+      ),
+      leg.departureFacilities()
+    );
+    assertEquals(List.of(), leg.arrivalFacilities());
+  }
+
+  @Test
+  void returnsNoFacilityDataForStopsThatAreNotInTheDatabase() {
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
+    when(otpClient.planRoute(request)).thenReturn(journeyBetween(UTRECHT_PLATFORM_7, AMSTERDAM_PLATFORM_7A));
+    when(facilityDao.findByStopIds(Set.of("NL:2994013", "NL:2992194"))).thenReturn(Map.of());
+
+    JourneyResponse.LegResponse leg = journeyService.planRoute(request).legs().getFirst();
+
+    assertNull(leg.departureFacilities());
+    assertNull(leg.arrivalFacilities());
+  }
+
+  @Test
+  void keepsJourneyWhenFacilitiesCannotBeLoaded() {
+    RoutePlanRequestDto request = new RoutePlanRequestDto("NL:station:1", "NL:station:2");
+    when(otpClient.planRoute(request)).thenReturn(journeyBetween(UTRECHT_PLATFORM_7, AMSTERDAM_PLATFORM_7A));
+    when(facilityDao.findByStopIds(Set.of("NL:2994013", "NL:2992194")))
+      .thenThrow(new DataAccessResourceFailureException("Database unavailable"));
+
+    JourneyResponse result = journeyService.planRoute(request);
+
+    assertEquals(1, result.legs().size());
+    assertNull(result.legs().getFirst().departureFacilities());
+    assertNull(result.legs().getFirst().arrivalFacilities());
+  }
+
+  private static OtpPlanResponse journeyBetween(OtpPlanResponse.Place from, OtpPlanResponse.Place to) {
+    OffsetDateTime departure = OffsetDateTime.parse("2026-10-08T13:04:00+02:00");
+    OffsetDateTime arrival = OffsetDateTime.parse("2026-10-08T13:31:00+02:00");
+    OtpPlanResponse.Leg leg = new OtpPlanResponse.Leg(
+      "RAIL",
+      "Amsterdam Centraal",
+      new OtpPlanResponse.LegTime(departure),
+      new OtpPlanResponse.LegTime(arrival),
+      new OtpPlanResponse.Route("Intercity"),
+      new OtpPlanResponse.Trip("3051"),
+      from,
+      to
+    );
+
+    return new OtpPlanResponse(
+      new OtpPlanResponse.Data(
+        new OtpPlanResponse.PlanConnection(
+          List.of(new OtpPlanResponse.Edge(
+            new OtpPlanResponse.Journey(departure, arrival, List.of(leg))
+          ))
+        )
+      ),
+      null
+    );
   }
 }

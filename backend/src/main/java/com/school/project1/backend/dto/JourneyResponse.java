@@ -19,6 +19,10 @@ public record JourneyResponse(
     String from,
     String departurePlatform,
     String to,
-    String arrivalPlatform
+    String arrivalPlatform,
+    List<FacilityResponse> departureFacilities,
+    List<FacilityResponse> arrivalFacilities
   ) {}
+
+  public record FacilityResponse(String type, boolean operational) {}
 }
