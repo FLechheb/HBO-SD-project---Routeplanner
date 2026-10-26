@@ -27,7 +27,7 @@ describe("recentStations", () => {
         expect(result).toHaveLength(1);
         expect(result[0]).toEqual(station);
     });
-});
+
 
 
 
@@ -73,4 +73,5 @@ it("bewaart maximaal vijf stations", () => {
     // Assert
     expect(result).toHaveLength(5);
     expect(result[0]).toEqual(stations[5]);
+});
 });

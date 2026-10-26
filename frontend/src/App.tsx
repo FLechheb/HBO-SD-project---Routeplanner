@@ -17,16 +17,20 @@ function App() {
   const [originName, setOriginName] = useState("");
   const [destinationName, setDestinationName] = useState("");
 
-  useEffect(() => {
-    const savedJourney = loadJourney();
 
-    if (savedJourney) {
-      setJourney(savedJourney.journey);
-      setOriginName(savedJourney.originName);
-      setDestinationName(savedJourney.destinationName);
-      setCurrentPage("results");
+  useEffect(() => {
+    if (!navigator.onLine) {
+      const savedJourney = loadJourney();
+
+      if (savedJourney) {
+        setJourney(savedJourney.journey);
+        setOriginName(savedJourney.originName);
+        setDestinationName(savedJourney.destinationName);
+        setCurrentPage("results");
+      }
     }
   }, []);
+
   const [isLoading, setIsLoading] = useState(false);
   const [routeError, setRouteError] = useState("");
   const [departure, setDeparture] = useState<Station | null>(null);
@@ -104,31 +108,42 @@ function App() {
           destination.gtfsId,
       );
 
-      saveJourney({
-        journey: result,
-        originName: departure.name,
-        destinationName: destination.name,
-      });
+      try {
+        saveJourney({
+          journey: result,
+          originName: departure.name,
+          destinationName: destination.name,
+        });
+      } catch {
+        // De reis is opgehaald, maar lokaal opslaan is niet gelukt.
+      }
 
       setJourney(result);
       setOriginName(departure.name);
       setDestinationName(destination.name);
       setCurrentPage("results");
-    } catch {
-      // Ook terugvallen op de opgeslagen route als de backend niet bereikbaar is.
-      const savedJourney = loadJourney();
 
-      if (savedJourney) {
-        setJourney(savedJourney.journey);
-        setOriginName(savedJourney.originName);
-        setDestinationName(savedJourney.destinationName);
-        setCurrentPage("results");
+    } catch (error) {
+      if (error instanceof TypeError && !navigator.onLine) {
+        const savedJourney = loadJourney();
+
+        if (savedJourney) {
+          setJourney(savedJourney.journey);
+          setOriginName(savedJourney.originName);
+          setDestinationName(savedJourney.destinationName);
+          setCurrentPage("results");
+        } else {
+          setRouteError(
+              "Je bent offline en er is geen opgeslagen route beschikbaar."
+          );
+        }
       } else {
         setRouteError(
-            "De route kon niet worden opgehaald en er is geen opgeslagen route beschikbaar.",
+            "De route kon niet worden opgehaald. Probeer het opnieuw."
         );
       }
     } finally {
+
       setIsLoading(false);
     }
   };
