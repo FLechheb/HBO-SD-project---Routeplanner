@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import "./App.css";
 import { planJourney as requestJourney, type JourneyResponse } from "./services/journeyResponse";
 import RouteForm from "./components/Routeform";
@@ -6,12 +6,31 @@ import ProfilePage from "./components/ProfilePage";
 import type { Station } from "./services/stationService";
 import { loadProfile, saveProfile, type TravelProfile } from "./utils/profileStorage";
 import RouteResult from "./components/RouteResult";
+import { saveJourney } from "./utils/journeyStorage";
+import { loadJourney } from "./utils/journeyStorage";
 
 type TimeMode = "now" | "departure" | "arrival";
 type Page = "planner" | "profile" | "results";
 
 function App() {
   const [journey, setJourney] = useState<JourneyResponse | null>(null);
+  const [originName, setOriginName] = useState("");
+  const [destinationName, setDestinationName] = useState("");
+
+
+  useEffect(() => {
+    if (!navigator.onLine) {
+      const savedJourney = loadJourney();
+
+      if (savedJourney) {
+        setJourney(savedJourney.journey);
+        setOriginName(savedJourney.originName);
+        setDestinationName(savedJourney.destinationName);
+        setCurrentPage("results");
+      }
+    }
+  }, []);
+
   const [isLoading, setIsLoading] = useState(false);
   const [routeError, setRouteError] = useState("");
   const [departure, setDeparture] = useState<Station | null>(null);
@@ -38,13 +57,16 @@ function App() {
     setCurrentPage("planner");
   };
 
+
   const planJourney = async (event: React.FormEvent) => {
     event.preventDefault();
     if (isLoading) return;
     setRouteError("");
 
     if (!departure || !destination) {
-      setRouteError("Kies een vertrekstation en bestemming uit de zoekresultaten.");
+      setRouteError(
+          "Kies een vertrekstation en bestemming uit de zoekresultaten.",
+      );
       return;
     }
 
@@ -54,24 +76,78 @@ function App() {
     }
 
     if (timeMode !== "now") {
-      setRouteError("Reizen op een gekozen datum of tijd wordt nog niet ondersteund.");
+      setRouteError(
+          "Reizen op een gekozen datum of tijd wordt nog niet ondersteund.",
+      );
+      return;
+    }
+
+    // Offline: toon de laatst opgeslagen route zonder de backend aan te roepen.
+    if (!navigator.onLine) {
+      const savedJourney = loadJourney();
+
+      if (savedJourney) {
+        setJourney(savedJourney.journey);
+        setOriginName(savedJourney.originName);
+        setDestinationName(savedJourney.destinationName);
+        setCurrentPage("results");
+      } else {
+        setRouteError(
+            "Je bent offline en er is geen opgeslagen route beschikbaar.",
+        );
+      }
+
       return;
     }
 
     setIsLoading(true);
+
     try {
       const result = await requestJourney(
-        departure.gtfsId,
-        destination.gtfsId,
+          departure.gtfsId,
+          destination.gtfsId,
       );
+
+      try {
+        saveJourney({
+          journey: result,
+          originName: departure.name,
+          destinationName: destination.name,
+        });
+      } catch {
+        // De reis is opgehaald, maar lokaal opslaan is niet gelukt.
+      }
+
       setJourney(result);
+      setOriginName(departure.name);
+      setDestinationName(destination.name);
       setCurrentPage("results");
-    } catch {
-      setRouteError("De route kon niet worden opgehaald. Probeer het opnieuw.");
+
+    } catch (error) {
+      if (error instanceof TypeError && !navigator.onLine) {
+        const savedJourney = loadJourney();
+
+        if (savedJourney) {
+          setJourney(savedJourney.journey);
+          setOriginName(savedJourney.originName);
+          setDestinationName(savedJourney.destinationName);
+          setCurrentPage("results");
+        } else {
+          setRouteError(
+              "Je bent offline en er is geen opgeslagen route beschikbaar."
+          );
+        }
+      } else {
+        setRouteError(
+            "De route kon niet worden opgehaald. Probeer het opnieuw."
+        );
+      }
     } finally {
+
       setIsLoading(false);
     }
   };
+
 
   return (
     <main>
@@ -118,10 +194,10 @@ function App() {
           </button>
 
           {journey && (
-            <RouteResult
-              journey={journey}
-              originName={departure?.name ?? ""}
-              destinationName={destination?.name ?? ""}
+              <RouteResult
+                  journey={journey}
+                  originName={originName || departure?.name || ""}
+                  destinationName={destinationName || destination?.name || ""}
             />
           )}
         </>

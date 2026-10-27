@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,13 +58,13 @@ class OtpClientTest {
   }
 
   @Test
-  void planRoutePostsQueryAndStationIds() {
+  void planRoutePostsQueryStationIdsAndExtraTransferTime() {
     responseBody.set("""
       {"data":{"planConnection":{"edges":[]}}}
       """);
 
     var response = otpClient.planRoute(
-      new RoutePlanRequestDto("NL:station:1", "NL:station:2")
+      new RoutePlanRequestDto("NL:station:1", "NL:station:2", 5)
     );
 
     JsonNode body = jsonMapper.readTree(requestBody.get());
@@ -73,6 +74,33 @@ class OtpClientTest {
     assertEquals("NL:station:1", body.path("variables").path("originStationId").stringValue());
     assertEquals("NL:station:2", body.path("variables").path("destinationStationId").stringValue());
     assertNotNull(response.data().planConnection());
+
+    assertTrue(
+      body.path("query")
+          .stringValue()
+          .contains("slack: $extraTransferTime")
+    );
+
+    assertEquals(
+      "PT5M",
+      body.path("variables")
+          .path("extraTransferTime")
+          .stringValue()
+    );
+  }
+
+  @Test
+  void planRouteUsesOtpDefaultTransferSlackWhenNoExtraTimeIsSelected() {
+    responseBody.set("""
+      {"data":{"planConnection":{"edges":[]}}}
+      """);
+
+    otpClient.planRoute(
+      new RoutePlanRequestDto("NL:station:1", "NL:station:2", 0)
+    );
+
+    JsonNode body = jsonMapper.readTree(requestBody.get());
+    assertFalse(body.path("variables").has("extraTransferTime"));
   }
 
   @Test

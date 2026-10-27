@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Set;
+
 @Service
 public class JourneyService {
+
+  private static final Set<Integer> ALLOWED_EXTRA_TRANSFER_MINUTES =
+    Set.of(0, 5, 10, 15);
 
   private final OtpClient otpClient;
 
@@ -29,6 +34,20 @@ public class JourneyService {
       throw new ResponseStatusException(
         HttpStatus.BAD_REQUEST,
         "Kies twee verschillende stations"
+      );
+    }
+
+    if (request.extraTransferMinutes() == null) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        "Extra overstaptijd is verplicht"
+      );
+    }
+
+    if (!ALLOWED_EXTRA_TRANSFER_MINUTES.contains(request.extraTransferMinutes())) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        "Ongeldige extra overstaptijd"
       );
     }
 
