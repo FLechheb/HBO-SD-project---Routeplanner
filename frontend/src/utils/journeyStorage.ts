@@ -31,11 +31,36 @@ function isSavedJourney(value: unknown): value is SavedJourney {
 
     const journey = saved.journey as Record<string, unknown>;
 
-    return (
-        typeof journey.departureTime === "string" &&
-        typeof journey.arrivalTime === "string" &&
-        Array.isArray(journey.legs)
-    );
+    if (
+        typeof journey.departureTime !== "string" ||
+        typeof journey.arrivalTime !== "string" ||
+        !Array.isArray(journey.legs)
+    ) {
+        return false;
+    }
+
+    return journey.legs.every((leg: unknown) => {
+        if (typeof leg !== "object" || leg === null) {
+            return false;
+        }
+
+        const item = leg as Record<string, unknown>;
+
+        return (
+            typeof item.mode === "string" &&
+            (typeof item.headsign === "string" || item.headsign === null) &&
+            (typeof item.departureTime === "string" || item.departureTime === null) &&
+            (typeof item.arrivalTime === "string" || item.arrivalTime === null) &&
+            (typeof item.routeName === "string" || item.routeName === null) &&
+            (typeof item.tripNumber === "string" || item.tripNumber === null) &&
+            typeof item.from === "string" &&
+            (typeof item.departurePlatform === "string" ||
+                item.departurePlatform === null) &&
+            typeof item.to === "string" &&
+            (typeof item.arrivalPlatform === "string" ||
+                item.arrivalPlatform === null)
+        );
+    });
 }
 
 export function loadJourney(): SavedJourney | null {
