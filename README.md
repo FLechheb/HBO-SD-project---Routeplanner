@@ -11,6 +11,17 @@ Maven multi-module project containing:
 - Node.js and npm
 - Docker for the backend's PostgreSQL Compose service
 
+
+## setup
+
+### Environment variables frontend
+
+Copy `./frontend/.env.example` to `./frontend/.env` and set the backend URL without a trailing slash:
+
+```dotenv
+VITE_API_URL=http://localhost:8080
+```
+
 ## Build and test
 
 Run the complete reactor build from the repository root:
