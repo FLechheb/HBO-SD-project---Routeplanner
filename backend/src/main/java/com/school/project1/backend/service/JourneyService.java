@@ -2,9 +2,8 @@ package com.school.project1.backend.service;
 
 import com.school.project1.backend.clients.OtpClient;
 import com.school.project1.backend.dto.JourneyResponse;
-import com.school.project1.backend.dto.otp.OtpPlanResponse;
 import com.school.project1.backend.dto.RoutePlanRequestDto;
-
+import com.school.project1.backend.dto.otp.OtpPlanResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;

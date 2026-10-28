@@ -28,47 +28,23 @@ Run only the backend:
 ./mvnw -pl backend spring-boot:run
 ```
 
+PostgreSQL starts automatically with the backend. OpenTripPlanner (OTP) is
+optional and is not started or checked for readiness by Spring Boot.
+Start it separately when needed (requires a prebuilt graph in `backend/otp-data`):
+
+```shell
+docker compose -f backend/compose.yaml --profile otp up -d otp
+```
+
+An OTP startup failure does not block the normal backend startup. Without OTP,
+live station searches and journey planning are unavailable; other endpoints
+remain usable. Do not enable the `otp` Compose profile for the backend process
+if OTP failures must not block startup. The default OTP URL is
+`http://localhost:8086`; override it with `OTP_BASE_URL` when using another instance.
+
 Run only the frontend during development:
 
 ```shell
 cd frontend
 npm run dev
 ```
-
-## Accessibility needs
-
-`GET /api/needs` returns the selectable requirement catalogue, ordered by type:
-
-```json
-[
-  {"type": "AUDITORY_INFORMATION_REQUIRED", "description": "Hoorbare informatie nodig"},
-  {"type": "ELEVATOR_REQUIRED", "description": "Lift nodig"},
-  {"type": "EXTRA_TRANSFER_TIME", "description": "Extra overstaptijd"},
-  {"type": "GUIDING_LINE_REQUIRED", "description": "Geleidelijn nodig"},
-  {"type": "LEVEL_ACCESS_REQUIRED", "description": "Trapvrije toegang nodig"},
-  {"type": "SEATING_REQUIRED", "description": "Zitplaats nodig"},
-  {"type": "VISUAL_INFORMATION_REQUIRED", "description": "Visuele informatie nodig"},
-  {"type": "WHEELCHAIR_ACCESSIBLE", "description": "Rolstoeltoegankelijk"}
-]
-```
-
-These are independent requirements, not disability presets. This intentionally
-replaces the previous disability codes and boolean DTO fields. Flyway migration
-V7 upgrades the catalogue; existing migrations remain unchanged.
-
-The backend evaluates facility requirements polymorphically through
-`FacilityNeed.evaluate`, with `AccessibilityService.evaluate` combining selected
-needs. Every applicable requirement must pass. Outcomes are `SATISFIED`,
-`UNSATISFIED`, or `NOT_APPLICABLE`; empty and timing-only selections are not
-applicable. Movement requirements do not constrain information facilities, and
-information requirements do not constrain movement facilities.
-
-An elevator requirement specifically requires an elevator; step-free access
-may instead be provided by a ramp. Seating is a per-movement-facility requirement,
-so a normal elevator without seating fails it. These checks do not establish
-whole-station or route accessibility.
-
-`EXTRA_TRANSFER_TIME` is catalogue-only in the backend. Profiles and chosen
-minutes remain frontend concerns, and needs are not applied to OTP planning.
-Frontend integration is tracked in
-[the profile follow-up ticket](.scratch/needs-rework/issues/01-api-backed-needs-profile.md).
