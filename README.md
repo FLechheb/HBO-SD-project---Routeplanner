@@ -30,7 +30,7 @@ Run only the backend:
 
 PostgreSQL starts automatically with the backend. OpenTripPlanner (OTP) is
 optional and is not started or checked for readiness by Spring Boot.
-Start it separately when needed (requires a prebuilt graph in `backend/otp-data`):
+Start it separately when needed (requires a prebuilt graph in `backend/otp-data`): [download graph.obj (expires 31-12-2026 )](https://hogeschoolutrecht-my.sharepoint.com/:u:/g/personal/nick_kaal_student_hu_nl/IQA7F0v3GfQuQamyeBlgoDVWAX28ylO8bj0C5KKy6IIQXrE?e=3nPs3f) 
 
 ```shell
 docker compose -f backend/compose.yaml --profile otp up -d otp
