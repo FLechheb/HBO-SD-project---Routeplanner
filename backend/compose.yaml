@@ -19,4 +19,4 @@ services:
     volumes:
       - './otp-data:/var/opentripplanner'
     ports:
-      - '8086:8080'
+      - '8085:8080'

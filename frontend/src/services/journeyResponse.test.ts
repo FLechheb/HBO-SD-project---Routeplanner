@@ -24,6 +24,7 @@ describe("planJourney", () => {
       "NL:stoparea:17843",
       "NL:stoparea:18188",
       5,
+      [],
     );
 
     // Assert
@@ -34,6 +35,7 @@ describe("planJourney", () => {
           originStationId: "NL:stoparea:17843",
           destinationStationId: "NL:stoparea:18188",
           extraTransferMinutes: 5,
+          selectedFacilities: [],
         }),
       }),
     );

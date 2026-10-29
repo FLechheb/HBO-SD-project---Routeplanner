@@ -4,12 +4,14 @@ import com.school.project1.backend.clients.OtpClient;
 import com.school.project1.backend.dto.JourneyResponse;
 import com.school.project1.backend.dto.RoutePlanRequestDto;
 import com.school.project1.backend.dto.otp.OtpPlanResponse;
+import com.school.project1.backend.model.needs.FacilityNeed;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JourneyService {
@@ -18,9 +20,11 @@ public class JourneyService {
     Set.of(0, 5, 10, 15);
 
   private final OtpClient otpClient;
+  private final SpecialNeedService specialNeedService;
 
-  public JourneyService(OtpClient otpClient) {
+  public JourneyService(OtpClient otpClient, SpecialNeedService specialNeedService) {
     this.otpClient = otpClient;
+    this.specialNeedService = specialNeedService;
   }
 
   public JourneyResponse planRoute(RoutePlanRequestDto request) {
@@ -48,6 +52,19 @@ public class JourneyService {
         HttpStatus.BAD_REQUEST,
         "Ongeldige extra overstaptijd"
       );
+    }
+
+    if (!request.selectedFacilities().isEmpty()) {
+      Set<String> availableFacilities = specialNeedService.getAllNeeds().stream()
+        .filter(FacilityNeed.class::isInstance)
+        .map(need -> need.getType().name())
+        .collect(Collectors.toSet());
+      if (!availableFacilities.containsAll(request.selectedFacilities())) {
+        throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          "Ongeldige voorzieningen. Controleer Mijn profiel"
+        );
+      }
     }
 
     OtpPlanResponse response;

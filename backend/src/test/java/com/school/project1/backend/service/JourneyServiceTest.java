@@ -26,7 +26,8 @@ import static org.mockito.Mockito.when;
 class JourneyServiceTest {
 
   private final OtpClient otpClient = mock(OtpClient.class);
-  private final JourneyService journeyService = new JourneyService(otpClient);
+  private final JourneyService journeyService =
+    new JourneyService(otpClient, mock(SpecialNeedService.class));
 
   @ParameterizedTest
   @ValueSource(ints = {0, 5, 10, 15})

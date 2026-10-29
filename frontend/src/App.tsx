@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
-import { planJourney as requestJourney, type JourneyResponse } from "./services/journeyResponse";
+import { planJourney as requestJourney, JourneyRequestError, type JourneyResponse } from "./services/journeyResponse";
 import RouteForm from "./components/Routeform";
 import ProfilePage from "./components/ProfilePage";
 import type { Station } from "./services/stationService";
@@ -115,6 +115,8 @@ function App() {
       const result = await requestJourney(
           departure.gtfsId,
           destination.gtfsId,
+          profile.transferTime,
+          profile.selectedFacilities,
       );
 
       try {
@@ -146,6 +148,10 @@ function App() {
               "Je bent offline en er is geen opgeslagen route beschikbaar."
           );
         }
+      } else if (error instanceof JourneyRequestError && error.status === 400) {
+        setRouteError(
+            "De reisvoorkeuren of stations zijn ongeldig. Controleer Mijn profiel en kies de stations opnieuw."
+        );
       } else {
         setRouteError(
             "De route kon niet worden opgehaald. Probeer het opnieuw."
