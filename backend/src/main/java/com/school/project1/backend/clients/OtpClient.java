@@ -54,8 +54,8 @@ public class OtpClient {
                       end { scheduledTime }
                       route { shortName }
                       trip { tripShortName }
-                      from { name stop { platformCode } }
-                      to { name stop { platformCode } }
+                      from { name stop { gtfsId platformCode } }
+                      to { name stop { gtfsId platformCode } }
                     }
                   }
                 }

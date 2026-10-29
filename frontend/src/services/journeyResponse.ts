@@ -1,3 +1,8 @@
+export interface Facility {
+  type: string;
+  operational: boolean;
+}
+
 export interface JourneyResponse {
   departureTime: string;
   arrivalTime: string;
@@ -12,6 +17,8 @@ export interface JourneyResponse {
     departurePlatform: string | null;
     to: string;
     arrivalPlatform: string | null;
+    departureFacilities: Facility[] | null;
+    arrivalFacilities: Facility[] | null;
   }[];
 }
 

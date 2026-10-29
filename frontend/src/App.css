@@ -402,6 +402,34 @@ section + button {
   font-weight: 600;
 }
 
+.route-result .stop-facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.route-result .stop-facilities li {
+  padding: 4px 8px;
+  border: 1px solid #7b8794;
+  border-radius: 5px;
+  background: #ffffff;
+  font-size: 14px;
+}
+
+.route-result .stop-facilities li.facility-out-of-order {
+  border-color: #b42318;
+  color: #b42318;
+}
+
+.stop-facilities-message {
+  margin: 0 0 8px;
+  color: #526071;
+  font-size: 14px;
+}
+
 @media (max-width: 480px) {
   .route-result {
     padding: 24px;
