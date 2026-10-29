@@ -1,4 +1,4 @@
-import { useState, useEffect  } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import { planJourney as requestJourney, type JourneyResponse } from "./services/journeyResponse";
 import RouteForm from "./components/Routeform";
@@ -56,6 +56,15 @@ function App() {
     saveProfile(updatedProfile); // Hier wordt profile gesaved 
     setCurrentPage("planner");
   };
+
+  const handleResetFacilities = useCallback(() => {
+    const updatedProfile: TravelProfile = {
+      selectedFacilities: [],
+      transferTime: profile.transferTime,
+    };
+    saveProfile(updatedProfile);
+    setProfile(updatedProfile);
+  }, [profile.transferTime]);
 
 
   const planJourney = async (event: React.FormEvent) => {
@@ -156,6 +165,7 @@ function App() {
           selectedFacilities={profile.selectedFacilities}
           transferTime={profile.transferTime}
           onSave={handleSaveProfile}
+          onResetFacilities={handleResetFacilities}
           onBack={() => setCurrentPage("planner")}
         />
       ) : currentPage === "planner" ? (
@@ -207,4 +217,3 @@ function App() {
 }
 
 export default App;
-

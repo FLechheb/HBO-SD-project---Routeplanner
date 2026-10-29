@@ -4,6 +4,11 @@ import com.school.project1.backend.model.needs.NeedType;
 
 public record SpecialNeedDto(
   NeedType type,
-  String description
+  String description,
+  Category category
 ){
+  public enum Category {
+    FACILITY,
+    TIMING
+  }
 }

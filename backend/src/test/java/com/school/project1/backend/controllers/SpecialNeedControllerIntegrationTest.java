@@ -49,7 +49,8 @@ class SpecialNeedControllerIntegrationTest {
         List<Map<String, Object>> expectedCatalogue =
             types.stream().map(type -> Map.<String, Object>of(
                 "type", type.name(),
-                "description", type.getDescription()
+                "description", type.getDescription(),
+                "category", type == NeedType.EXTRA_TRANSFER_TIME ? "TIMING" : "FACILITY"
             )).toList();
 
         // Act
