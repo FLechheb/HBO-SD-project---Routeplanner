@@ -2,7 +2,7 @@
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
 import { loadJourney, saveJourney } from "./utils/journeyStorage";
 
@@ -65,7 +65,8 @@ vi.mock("./services/journeyResponse", () => ({
 describe("App offline gedrag", () => {
     beforeEach(() => {
         localStorage.clear();
-        vi.restoreAllMocks();
+        cleanup();
+        vi.clearAllMocks();
 
         vi.stubGlobal("navigator", {
             ...navigator,
@@ -95,4 +96,40 @@ describe("App offline gedrag", () => {
         expect(loadJourney()).not.toBeNull();
         expect(mockPlanJourney).not.toHaveBeenCalled();
     });
+
+
+    it("toont geen opgeslagen route als de backend een HTTP-fout geeft", async () => {
+        saveJourney({
+            journey: {
+                departureTime: "2026-10-22T10:00:00+02:00",
+                arrivalTime: "2026-10-22T11:00:00+02:00",
+                legs: [],
+            },
+            originName: "Rotterdam Centraal",
+            destinationName: "Utrecht Centraal",
+        });
+
+        vi.stubGlobal("navigator", {
+            ...navigator,
+            onLine: true,
+        });
+
+        mockPlanJourney.mockRejectedValue(
+            new Error("Reis opvragen mislukt (500)"),
+        );
+
+        render(<App />);
+
+        fireEvent.click(
+            screen.getByRole("button", { name: "Stel teststations in" }),
+        );
+        fireEvent.click(
+            screen.getByRole("button", { name: "Plan mijn reis" }),
+        );
+
+        expect(await screen.findByText("De route kon niet worden opgehaald. Probeer het opnieuw.")).toBeTruthy();
+
+        expect(screen.queryByText("Rotterdam Centraal")).toBeNull();
+    });
+
 });

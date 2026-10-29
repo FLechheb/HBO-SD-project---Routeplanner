@@ -12,7 +12,7 @@ export function calculateTravelTime(
   const departure = departureHours * 60 + departureMinutes;
   const arrival = arrivalHours * 60 + arrivalMinutes;
 
-  const difference = arrival - departure + extraMinutes;
+  const difference = (arrival < departure ? arrival + 1440 : arrival) - departure + extraMinutes;
 
   const hours = Math.floor(difference / 60);
   const minutes = difference % 60;

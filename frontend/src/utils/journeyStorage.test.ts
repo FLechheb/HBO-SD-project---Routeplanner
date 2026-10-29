@@ -19,6 +19,7 @@ describe("journeyStorage", () => {
         expect(result).toBeNull();
     });
 
+
     it("slaat een route op en laadt deze weer", () => {
         // Arrange
         const savedRoute = {
@@ -38,6 +39,7 @@ describe("journeyStorage", () => {
         // Assert
         expect(result).toEqual(savedRoute);
     });
+
 
     it("geeft null terug als de opgeslagen data ongeldig is", () => {
         // Arrange
