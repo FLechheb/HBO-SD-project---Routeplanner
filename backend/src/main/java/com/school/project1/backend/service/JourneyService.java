@@ -5,6 +5,7 @@ import com.school.project1.backend.dto.JourneyResponse;
 import com.school.project1.backend.dto.otp.OtpPlanResponse;
 import com.school.project1.backend.dto.RoutePlanRequestDto;
 import com.school.project1.backend.model.facilities.PhysicalFacility;
+import com.school.project1.backend.model.needs.FacilityNeed;
 import com.school.project1.backend.repository.dao.FacilityDao;
 
 import org.slf4j.Logger;
@@ -26,13 +27,21 @@ import java.util.stream.Stream;
 public class JourneyService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JourneyService.class);
+  private static final Set<Integer> ALLOWED_EXTRA_TRANSFER_MINUTES =
+    Set.of(0, 5, 10, 15);
 
   private final OtpClient otpClient;
   private final FacilityDao facilityDao;
+  private final SpecialNeedService specialNeedService;
 
-  public JourneyService(OtpClient otpClient, FacilityDao facilityDao) {
+  public JourneyService(
+    OtpClient otpClient,
+    FacilityDao facilityDao,
+    SpecialNeedService specialNeedService
+  ) {
     this.otpClient = otpClient;
     this.facilityDao = facilityDao;
+    this.specialNeedService = specialNeedService;
   }
 
   public JourneyResponse planRoute(RoutePlanRequestDto request) {
@@ -46,6 +55,33 @@ public class JourneyService {
         HttpStatus.BAD_REQUEST,
         "Kies twee verschillende stations"
       );
+    }
+
+    if (request.extraTransferMinutes() == null) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        "Extra overstaptijd is verplicht"
+      );
+    }
+
+    if (!ALLOWED_EXTRA_TRANSFER_MINUTES.contains(request.extraTransferMinutes())) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        "Ongeldige extra overstaptijd"
+      );
+    }
+
+    if (!request.selectedFacilities().isEmpty()) {
+      Set<String> availableFacilities = specialNeedService.getAllNeeds().stream()
+        .filter(FacilityNeed.class::isInstance)
+        .map(need -> need.getType().name())
+        .collect(Collectors.toSet());
+      if (!availableFacilities.containsAll(request.selectedFacilities())) {
+        throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          "Ongeldige voorzieningen. Controleer Mijn profiel"
+        );
+      }
     }
 
     OtpPlanResponse response;

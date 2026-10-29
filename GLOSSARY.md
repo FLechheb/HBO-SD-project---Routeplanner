@@ -10,6 +10,14 @@ An independently selected traveller requirement, such as wheelchair access,
 visual information, or extra transfer time. A traveller can combine several needs.
 _Avoid_: Disability, diagnosis, person category
 
+**Facility need**:
+A traveller requirement concerning a facility used for movement or obtaining
+information. It applies only to facilities whose role concerns that requirement.
+
+**Timing need**:
+A traveller requirement concerning journey timing, such as extra transfer time,
+rather than the properties of an individual facility.
+
 **Facility**:
 An individual provision used for movement/navigation or obtaining information,
 such as an elevator, staircase, information board, or speaker.

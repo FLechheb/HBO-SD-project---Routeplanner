@@ -22,10 +22,21 @@ export interface JourneyResponse {
   }[];
 }
 
+export class JourneyRequestError extends Error {
+  readonly status: number;
+
+  constructor(status: number) {
+    super(`Reis opvragen mislukt (${status})`);
+    this.status = status;
+  }
+}
+
 export async function planJourney(
   originStationId: string,
   destinationStationId: string,
-): Promise<JourneyResponse>  {
+  extraTransferMinutes: number,
+  selectedFacilities: string[],
+): Promise<JourneyResponse> {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/api/routes/plan`,
     {
@@ -34,12 +45,14 @@ export async function planJourney(
       body: JSON.stringify({
         originStationId,
         destinationStationId,
+        extraTransferMinutes,
+        selectedFacilities,
       }),
     },
   );
 
   if (!response.ok) {
-    throw new Error(`Reis opvragen mislukt (${response.status})`);
+    throw new JourneyRequestError(response.status);
   }
 
   return (await response.json()) as JourneyResponse;

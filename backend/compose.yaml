@@ -9,6 +9,9 @@ services:
       - '5432:5432'
 
   otp:
+    profiles: ['otp']
+    labels:
+      org.springframework.boot.ignore: 'true'
     image: 'opentripplanner/opentripplanner@sha256:36bdb5d57a5435d6da34f2adde18da62b338acfc465a9c0345ce64f74e355a0c'
     command: ['--load', '--serve']
     environment:

@@ -11,13 +11,18 @@ import com.school.project1.backend.dto.RoutePlanRequestDto;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class OtpClient {
 
     private static final String PLAN_QUERY = """
-        query PlanRoute($originStationId: String!, $destinationStationId: String!) {
+        query PlanRoute(
+          $originStationId: String!,
+          $destinationStationId: String!,
+          $extraTransferTime: Duration
+        ) {
               planConnection(
                 origin: {
                   location: {
@@ -27,6 +32,13 @@ public class OtpClient {
                 destination: {
                   location: {
                     stopLocation: { stopLocationId: $destinationStationId }
+                  }
+                }
+                preferences: {
+                  transit: {
+                    transfer: {
+                      slack: $extraTransferTime
+                    }
                   }
                 }
                 first: 1
@@ -81,14 +93,18 @@ public class OtpClient {
     }
 
     public OtpPlanResponse planRoute(RoutePlanRequestDto request) {
-      return postQuery(
-        PLAN_QUERY,
-        Map.of(
-          "originStationId", request.originStationId(),
-          "destinationStationId", request.destinationStationId()
-        ),
-        OtpPlanResponse.class
-      );
+      Map<String, String> variables = new HashMap<>();
+      variables.put("originStationId", request.originStationId());
+      variables.put("destinationStationId", request.destinationStationId());
+
+      if (request.extraTransferMinutes() > 0) {
+        variables.put(
+          "extraTransferTime", 
+          Duration.ofMinutes(request.extraTransferMinutes()).toString()
+        );
+      }
+
+      return postQuery(PLAN_QUERY, variables, OtpPlanResponse.class);
     }
 
     public OtpStationsResponse searchStations(String name) {
